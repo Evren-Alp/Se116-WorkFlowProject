@@ -3,5 +3,10 @@ public enum TaskType {
     SIPARISALMA,
     SIPARISGOTURME,
     HESAPGOTURME,
+    DOGRAMA,
+    FIRINLAMA,
+    HASLAMA,
+    TABAKLAMA,
+    KIZARTMA,
     
 }

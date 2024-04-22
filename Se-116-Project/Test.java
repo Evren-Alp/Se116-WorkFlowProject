@@ -11,23 +11,38 @@ public class Test {
         }
     }
     public static void main(String[] args) {
+        Task dograma = new Task(TaskType.DOGRAMA, 3); 
+        Task firinlama = new Task(TaskType.FIRINLAMA, 20); 
+        Task haslama = new Task(TaskType.HASLAMA, 20); 
+        Task kizartma = new Task(TaskType.KIZARTMA, 10);
+        Task tabaklama = new Task(TaskType.TABAKLAMA, 5); 
+        Task siparis = new Task(TaskType.SIPARISALMA, 5);
+        Task getir = new Task(TaskType.SIPARISGOTURME,15 );
+        Task bekle = new Task(TaskType.BEKLEME, 30);
+        Task hesap = new Task(TaskType.HESAPGOTURME, 5);
+
         ArrayList<TaskType> garsonAblility = new ArrayList<>();
         garsonAblility.add(TaskType.SIPARISALMA);
         garsonAblility.add(TaskType.SIPARISGOTURME);
         garsonAblility.add(TaskType.BEKLEME);
         garsonAblility.add(TaskType.HESAPGOTURME);
-    ArrayList<Task> siparisAlma = new ArrayList<>();
-    Task siparis = new Task(TaskType.SIPARISALMA, 5);
-    Task getir = new Task(TaskType.SIPARISGOTURME,15 );
-    Task bekle = new Task(TaskType.BEKLEME, 30);
-    Task hesap = new Task(TaskType.HESAPGOTURME, 5);
-    siparisAlma.add(siparis);
-    siparisAlma.add(getir);
-    siparisAlma.add(bekle);
-    siparisAlma.add(hesap);
+
+    ArrayList<Task> siparisAlmaTasks = new ArrayList<>();
+        siparisAlmaTasks.add(siparis);
+        siparisAlmaTasks.add(getir);
+        siparisAlmaTasks.add(bekle);
+        siparisAlmaTasks.add(hesap);
+    
+    ArrayList<Task> kizartmaTasks = new ArrayList<>();
+        kizartmaTasks.add(dograma);
+        kizartmaTasks.add(dograma);
+        kizartmaTasks.add(tabaklama);
+
     Station Garson=new Station("Asli", garsonAblility, 3, 1.2);
-    Job Garsonluk = new Job("Yeni musteri", 60, siparisAlma);
-    describeJob(Garsonluk);
+    Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
+    Job PatatesKizartmasi = new Job("mutfak", 35, kizartmaTasks);
+    describeJob(YeniMusteri);
     Garson.work(siparis);
+    describeJob(PatatesKizartmasi);
     }
 }
