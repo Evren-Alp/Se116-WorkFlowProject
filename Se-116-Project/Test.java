@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+
 public class Test {
     public static void main(String[] args) {
-        System.out.println("Helloworld");
+        System.out.println("naber");
+        ArrayList<Integer> sayilar = new ArrayList<>();
     }
 }
