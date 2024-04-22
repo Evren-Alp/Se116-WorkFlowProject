@@ -16,4 +16,29 @@ public class Job {
         this.duration = duration;
         this.tasks = tasks;
     }
+
+    public String getJobType() {
+        return jobType;
+    }
+
+    public void setJobType(String jobType) {
+        this.jobType = jobType;
+    }
+
+    public int getJobDuration() {
+        return duration;
+    }
+
+    public void setJobDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+    }
+    
 }
