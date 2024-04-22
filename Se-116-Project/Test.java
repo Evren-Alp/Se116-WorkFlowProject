@@ -9,6 +9,6 @@ public class Test {
     nejat.add(task1);
     nejat.add(task2);
     nejat.add(task3);
-    Jobs jobs = new Jobs("dikis", 60, nejat);
+    Job jobs = new Job("dikis", 60, nejat);
     }
 }
