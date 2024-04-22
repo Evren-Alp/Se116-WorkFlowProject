@@ -27,7 +27,7 @@ public class Test {
         garsonAblility.add(TaskType.BEKLEME);
         garsonAblility.add(TaskType.HESAPGOTURME);
         garsonAblility.add(TaskType.MASASILME);
-        garsonAblility.add(TaskType.ICECEKGOTURME);
+        garsonAblility.add(TaskType.ICECEKGETIRME);
 
     ArrayList<Task> siparisAlmaTasks = new ArrayList<>();
         siparisAlmaTasks.add(siparis);
@@ -37,7 +37,7 @@ public class Test {
     
     ArrayList<Task> kizartmaTasks = new ArrayList<>();
         kizartmaTasks.add(dograma);
-        kizartmaTasks.add(dograma);
+        kizartmaTasks.add(kizartma);
         kizartmaTasks.add(tabaklama);
 
     Station Garson=new Station("Asli", garsonAblility, 3, 1.2);
