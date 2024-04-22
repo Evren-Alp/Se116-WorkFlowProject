@@ -26,6 +26,8 @@ public class Test {
         garsonAblility.add(TaskType.SIPARISGOTURME);
         garsonAblility.add(TaskType.BEKLEME);
         garsonAblility.add(TaskType.HESAPGOTURME);
+        garsonAblility.add(TaskType.MASASILME);
+        garsonAblility.add(TaskType.ICECEKGOTURME);
 
     ArrayList<Task> siparisAlmaTasks = new ArrayList<>();
         siparisAlmaTasks.add(siparis);
