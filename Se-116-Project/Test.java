@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Test {
+    public static ArrayList<Task> activeTasks= new ArrayList<>();
     public static void describeJob(Job job) {
         System.out.println("Job Title: " + job.getJobType());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
@@ -10,7 +11,28 @@ public class Test {
             System.out.println("Task duration: " + task.getTaskSize()+" minutes");
         }
     }
+    public static void ekle(Job job){
+        ArrayList<Task> is=job.getTasks();
+        activeTasks.addAll(is);
+
+
+
+    }
+    public static void displayActiveTasks(){
+        if (activeTasks.size()<1){
+            System.out.println("active task is empty");
+        }
+        if (activeTasks.size()>1) {
+            for (int i = 0; i < activeTasks.size(); i++) {
+                System.out.println(activeTasks.get(i).getTaskType());
+                
+            }
+        }
+       
+    }
+
     public static void main(String[] args) {
+        
         Task dograma = new Task(TaskType.DOGRAMA, 3); 
         Task firinlama = new Task(TaskType.FIRINLAMA, 20); 
         Task haslama = new Task(TaskType.HASLAMA, 20); 
@@ -43,8 +65,9 @@ public class Test {
     Station Garson=new Station("Asli", garsonAblility, 3, 1.2);
     Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
     Job PatatesKizartmasi = new Job("mutfak", 35, kizartmaTasks);
-    describeJob(YeniMusteri);
-    Garson.work(siparis);
-    describeJob(PatatesKizartmasi);
-    }
+   displayActiveTasks();
+    ekle(YeniMusteri);
+    ekle(YeniMusteri);
+    displayActiveTasks();
+    }  
 }

@@ -5,7 +5,6 @@ public class Station{
     private ArrayList<TaskType> supportedTaskTypes;
     private int capacity;
     private double speed;
-    private boolean canDoMultipleActions;
  
     public Station(String stationName, ArrayList<TaskType> supportedTaskTypes, int capacity, double speed) {
         this.stationName = stationName;
