@@ -62,12 +62,12 @@ public class Test {
         kizartmaTasks.add(kizartma);
         kizartmaTasks.add(tabaklama);
 
-    Station Garson=new Station("Asli", garsonAblility, 3, 1.2);
+    Station Garson=new Station("Asli", garsonAblility, 3, 1.0);
     Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
     Job PatatesKizartmasi = new Job("mutfak", 35, kizartmaTasks);
-   displayActiveTasks();
-    ekle(YeniMusteri);
+    ekle(PatatesKizartmasi);
     ekle(YeniMusteri);
     displayActiveTasks();
+    Garson.basla();
     }  
 }

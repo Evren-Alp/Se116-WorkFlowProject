@@ -1,28 +1,28 @@
 import java.util.ArrayList;
 
 public class Job {
-    private String jobType;
+    private String jobName;
     private int duration;
     private ArrayList<Task> tasks;
 
     public Job() {
-        this.jobType = "";
+        this.jobName = "";
         this.duration = 0;
         this.tasks = new ArrayList<Task>();
     }
     
-    public Job(String jobType, int duration, ArrayList<Task> tasks) {
-        this.jobType = jobType;
+    public Job(String jobName, int duration, ArrayList<Task> tasks) {
+        this.jobName = jobName;
         this.duration = duration;
         this.tasks = tasks;
     }
 
-    public String getJobType() {
-        return jobType;
+    public String getjobName() {
+        return jobName;
     }
 
-    public void setJobType(String jobType) {
-        this.jobType = jobType;
+    public void setjobName(String jobName) {
+        this.jobName = jobName;
     }
 
     public int getJobDuration() {
