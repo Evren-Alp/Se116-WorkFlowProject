@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Test {
     public static ArrayList<Task> activeTasks= new ArrayList<>();
     public static void describeJob(Job job) {
-        System.out.println("Job Title: " + job.getJobType());
+        System.out.println("Job Title: " + job.getjobName());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
         System.out.println("Tasks:");
         for (Task task : job.getTasks()) {
