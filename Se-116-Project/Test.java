@@ -1,4 +1,9 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+
 
 public class Test {
     public static int tur;
@@ -14,6 +19,7 @@ public class Test {
             System.out.println("Task duration: " + task.getTaskSize()+" minutes");
         }
     }
+
     public static void ekle(Job job){
         ArrayList<Task> is=job.getTasks();
         activeTasks.addAll(is);
@@ -63,6 +69,20 @@ public class Test {
             tur++;
         }
     }
+    //write method??
+    public static void writeToFile(String content) {
+        try {
+            File file = new File("output.txt");
+            FileWriter writer = new FileWriter(file);
+            writer.write(content + "\n");
+            writer.close();
+            System.out.println("Content written to file successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file.");
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         
         Task dograma = new Task(TaskType.DOGRAMA, 3); 
