@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 public class Station{
     private String stationName;
     private ArrayList<TaskType> supportedTaskTypes;
+    private int startingCapacity;
     private int capacity;
     private double speed;
  
@@ -11,6 +12,7 @@ public class Station{
         this.stationName = stationName;
         this.supportedTaskTypes = supportedTaskTypes;
         this.capacity = capacity;
+        this.startingCapacity = capacity;
         this.speed = speed;
     }
 
@@ -34,7 +36,7 @@ public class Station{
     public void work(Task task) {
         if (supportedTaskTypes.contains(task.getTaskType())) {
             capacity--;
-            System.out.println("doing job: "+task.getTaskType());
+            System.out.println("doing job: " + task.getTaskType().toString().substring(0, 1).toUpperCase() + task.getTaskType().toString().substring(1).toLowerCase());
             System.out.println("duration: " + calculateTaskDuration(task));
             try {
                 TimeUnit.SECONDS.sleep(calculateTaskDuration(task)/5); //remove /5
