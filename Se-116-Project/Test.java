@@ -59,8 +59,29 @@ public class Test {
             }
     }
     public static void basla(){ //evren
+        int turcapacity=0;
         tur=0;
         while(activeTasks.size()>0){
+            for (Station station : stationList) {
+                turcapacity+=station.getCapacity();
+                
+            }
+            for (int i = 0; i < turcapacity; i++) {
+                for (int j = 0; j < stationList.size(); j++) {
+                    if (stationList.get(j).getSupportedTaskTypes().contains(activeTasks.get(i).getTaskType())&&stationList.get(j).getCapacity()>0){
+                        stationList.get(j).setCapacity(stationList.get(j).getCapacity()-1);
+                        stationList.get(j).work(activeTasks.get(i));
+                        activeTasks.remove(i);
+                        i=0;
+                        j=0;    
+                        break;
+                    }
+                    
+                    
+                }
+                
+            }
+            
             
             
 
@@ -120,7 +141,7 @@ public class Test {
     Job PatatesKizartmasi = new Job("Patates Kizartmasi", 35, kizartmaTasks);
     ekle(PatatesKizartmasi);
     ekle(YeniMusteri);
-    displayActiveTasks();
+   
     jobList.add(YeniMusteri);
     jobList.add(PatatesKizartmasi);
     stationList.add(Garson);

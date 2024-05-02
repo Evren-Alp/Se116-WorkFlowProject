@@ -23,16 +23,9 @@ public class Station{
     public void work(Task task) {
         if (supportedTaskTypes.contains(task.getTaskType())) {
             capacity--;
-            System.out.println("doing job: " + task.getTaskType().toString().substring(0, 1).toUpperCase() + task.getTaskType().toString().substring(1).toLowerCase());
+            System.out.println( stationName +" doing job: " + task.getTaskType().toString().substring(0, 1).toUpperCase() + task.getTaskType().toString().substring(1).toLowerCase());
             System.out.println("duration: " + calculateTaskDuration(task));
-            try {
-                TimeUnit.SECONDS.sleep(calculateTaskDuration(task)/5); //remove /5
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("job done");
-                capacity++;
-            }
+           
         } else {
             System.out.println("Unsupported task type for this station");
         }
