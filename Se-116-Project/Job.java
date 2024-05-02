@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Job {
+    private String status;
     private String jobName;
     private int duration;
     private ArrayList<Task> tasks;
@@ -12,6 +13,7 @@ public class Job {
     }
     
     public Job(String jobName, int duration, ArrayList<Task> tasks) {
+        this.status = "Unfinished";
         this.jobName = jobName;
         this.duration = duration;
         this.tasks = tasks;
@@ -39,6 +41,14 @@ public class Job {
 
     public void setTasks(ArrayList<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 }

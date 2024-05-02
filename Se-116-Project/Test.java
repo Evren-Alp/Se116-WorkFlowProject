@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 
 public class Test {
+    public static int tur;
     public static ArrayList<Task> activeTasks= new ArrayList<>();
+    public static ArrayList<Station> stationList= new ArrayList<>();
+    public static ArrayList<Job> jobList= new ArrayList<>();
     public static void describeJob(Job job) {
         System.out.println("Job Title: " + job.getjobName());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
@@ -30,7 +33,36 @@ public class Test {
         }
        
     }
+    public static void yaz(){
+        System.out.println("\nMinute: "+tur);
+            System.out.println("jobs: ");
+            for (Job job : jobList) {
+                System.out.println(job.getjobName()+"/"+job.getStatus()+"/Remaining: "+job.getJobDuration());
+            }
+            System.out.print("\nStations: ");
+            for (Station station : stationList) {
+                String status="";
+                if (station.getCapacity()==station.getStartingCapacity()) {
+                    status="Idle";
+                }
+                else{
+                    status="Working";
+                    
+                }
+                System.out.print("  "+station.getStationName()+"/"+status+"   ");
+            }
+    }
+    public static void basla(){ //evren
+        tur=0;
+        while(activeTasks.size()>0){
+            
+            
 
+
+
+            tur++;
+        }
+    }
     public static void main(String[] args) {
         
         Task dograma = new Task(TaskType.DOGRAMA, 3); 
@@ -63,11 +95,16 @@ public class Test {
         kizartmaTasks.add(tabaklama);
 
     Station Garson=new Station("Asli", garsonAblility, 3, 1.0);
+    Station Mutfak=new Station("Mutfak", garsonAblility, 3, 1.0);
     Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
-    Job PatatesKizartmasi = new Job("mutfak", 35, kizartmaTasks);
+    Job PatatesKizartmasi = new Job("Patates Kizartmasi", 35, kizartmaTasks);
     ekle(PatatesKizartmasi);
     ekle(YeniMusteri);
     displayActiveTasks();
-    Garson.basla();
+    jobList.add(YeniMusteri);
+    jobList.add(PatatesKizartmasi);
+    stationList.add(Garson);
+    stationList.add(Mutfak);
+    basla();
     }  
 }

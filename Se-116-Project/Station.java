@@ -19,20 +19,7 @@ public class Station{
     public int calculateTaskDuration(Task task) {
         return (int) (task.getTaskSize() / speed);
     }
-    public void basla(){
-        System.out.println("Station is working");
-       for (int i = 0; i < Test.activeTasks.size(); ) {
-        if (capacity>0 && supportedTaskTypes.contains(Test.activeTasks.get(i).getTaskType())) {
-            work(Test.activeTasks.get(i));
-            Test.activeTasks.remove(i);
-        }
-        else{
-            System.out.println("Station is full or task is not supported");
-            i++;
-        }
-        
-       }
-    }
+    
     public void work(Task task) {
         if (supportedTaskTypes.contains(task.getTaskType())) {
             capacity--;
@@ -50,4 +37,45 @@ public class Station{
             System.out.println("Unsupported task type for this station");
         }
     }
+
+    public String getStationName() {
+        return stationName;
+    }
+
+    public void setStationName(String stationName) {
+        this.stationName = stationName;
+    }
+
+    public ArrayList<TaskType> getSupportedTaskTypes() {
+        return supportedTaskTypes;
+    }
+
+    public void setSupportedTaskTypes(ArrayList<TaskType> supportedTaskTypes) {
+        this.supportedTaskTypes = supportedTaskTypes;
+    }
+
+    public int getStartingCapacity() {
+        return startingCapacity;
+    }
+
+    public void setStartingCapacity(int startingCapacity) {
+        this.startingCapacity = startingCapacity;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+    
 }
