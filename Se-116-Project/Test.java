@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 
@@ -124,28 +125,33 @@ public class Test {
         garsonAblility.add(TaskType.MASASILME);
         garsonAblility.add(TaskType.ICECEKGETIRME);
 
-    ArrayList<Task> siparisAlmaTasks = new ArrayList<>();
+        ArrayList<Task> siparisAlmaTasks = new ArrayList<>();
         siparisAlmaTasks.add(siparis);
         siparisAlmaTasks.add(getir);
         siparisAlmaTasks.add(bekle);
         siparisAlmaTasks.add(hesap);
     
-    ArrayList<Task> kizartmaTasks = new ArrayList<>();
+        ArrayList<Task> kizartmaTasks = new ArrayList<>();
         kizartmaTasks.add(dograma);
         kizartmaTasks.add(kizartma);
         kizartmaTasks.add(tabaklama);
 
-    Station Garson=new Station("Asli", garsonAblility, 3, 1.0);
-    Station Mutfak=new Station("Mutfak", garsonAblility, 3, 1.0);
-    Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
-    Job PatatesKizartmasi = new Job("Patates Kizartmasi", 35, kizartmaTasks);
-    ekle(PatatesKizartmasi);
-    ekle(YeniMusteri);
-   
-    jobList.add(YeniMusteri);
-    jobList.add(PatatesKizartmasi);
-    stationList.add(Garson);
-    stationList.add(Mutfak);
-    basla();
+        Station Garson=new Station("Asli", garsonAblility, 3, 1.0);
+        Station Mutfak=new Station("Mutfak", garsonAblility, 3, 1.0);
+        Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
+        Job PatatesKizartmasi = new Job("Patates Kizartmasi", 35, kizartmaTasks);
+        ekle(PatatesKizartmasi);
+        ekle(YeniMusteri);
+    
+        jobList.add(YeniMusteri);
+        jobList.add(PatatesKizartmasi);
+        stationList.add(Garson);
+        stationList.add(Mutfak);
+        basla();
+
+
+        // Func Req. 1: getting the name of the workflow and the job file
+        String workflowFile = args[0];
+        String jobFile = args[1];
     }  
 }
