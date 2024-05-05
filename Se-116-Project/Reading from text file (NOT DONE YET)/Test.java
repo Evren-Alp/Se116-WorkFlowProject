@@ -15,28 +15,34 @@ class Task{
     public Task(String name){
         this.name = name;
     }
-    public void setName(String name){
-        this.name = name;
-    }
-    public void setSize(float size){
-        this.size = size;
+    public Task(){
+
     }
     public String getName(){
         return this.name;
     }
+    public void setName(String name){
+        this.name = name;
+    }
     public float getSize(){
         return this.size;
     }
+    public void setSize(float size){
+        this.size = size;
+    }
 }
 class Job{
-    private String jobName = "";
+    private String jobID = "";
     private ArrayList<Task> tasks;
-    public Job(String jobName, ArrayList<Task> tasks){
-        this.jobName = jobName;
+    public Job(String jobID, ArrayList<Task> tasks){
+        this.jobID = jobID;
         this.tasks = tasks;
     }
-    public Job(String jobName){
-        this.jobName = jobName;
+    public Job(String jobID){
+        this.jobID = jobID;
+    }
+    public Job(){
+
     }
     public void addTask(Task task){
         this.tasks.add(task);
@@ -47,11 +53,11 @@ class Job{
     public void setTasks(ArrayList<Task> tasks){
         this.tasks = tasks;
     }
-    public String getJobName(){
-        return this.jobName;
+    public String getJobID(){
+        return this.jobID;
     }
-    public void setJobName(String jobName){
-        this.jobName = jobName;
+    public void setJobID(String jobID){
+        this.jobID = jobID;
     }
 }
 
@@ -67,9 +73,9 @@ public class Test{
         // System.out.println(txt);
 
         // Checking for Syntax Errors: ----------------------------------------------------------------------------------------
-        // negative task size:
+        // Pattern for checking negative task sizes
         boolean found1 = false;
-        Pattern negativeNums = Pattern.compile("[A-z]+\\d+\\s-\\d");
+        Pattern negativeNums = Pattern.compile("[A-z]+\\d+\\s-\\d+\\.\\d+|[A-z]+\\d+\\s-\\d+");
         Matcher negativeNumMatcher = negativeNums.matcher(txt);
         while(negativeNumMatcher.find()){
             found1 = true;
@@ -83,9 +89,9 @@ public class Test{
         }
         else System.out.println("[OK] Tasktype sizes");
         
-        // Invalid tasktypeID : SHOULD BE DEPENDANT ON TASK NAMES NEEDS TO BE CHANGED LATER!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // Pattern to check for invalid tasktypeIDs ------ SHOULD BE DEPENDANT ON TASK NAMES NEEDS TO BE CHANGED LATER!! ------
         boolean found3 = false;
-        Pattern invalidTaskTypeID = Pattern.compile("\\d+[A-z]");
+        Pattern invalidTaskTypeID = Pattern.compile("\\d+[A-z]+\\d+"); // if starts with a number
         Matcher invalidTaskTypeIDMatcher = invalidTaskTypeID.matcher(txt);
         while(invalidTaskTypeIDMatcher.find()){
             found3 = true;
@@ -100,11 +106,13 @@ public class Test{
         else System.out.println("[OK] Tasktype IDs");
         
         // TASKTYPES SECTION --------------------------------------------------------------------------------------------------
+        // Pattern for taking the tasks from the TASKTYPES section from the text file
         Pattern tasktypeExpressionFinder = Pattern.compile("TASKTYPES((\\s[A-Z]+\\d+|\\s[A-Z]+_\\d+)(\\s\\d\\.\\d|\\s\\d)?)+");
         Matcher tasktypeMatcher = tasktypeExpressionFinder.matcher(txt);
         String taskTypes = "";
         if(tasktypeMatcher.find())
             taskTypes = tasktypeMatcher.group();
+        // Pattern to separate all tasks
         Pattern tasktypesExpressions = Pattern.compile("((\\s[A-Z]+\\d+|\\s[A-Z]+_\\d+)(\\s\\d\\.\\d|\\s\\d)?)");
         Matcher foundTaskTypes = tasktypesExpressions.matcher(taskTypes);
         // The list of each tasktypeID and it's value:
@@ -142,7 +150,6 @@ public class Test{
             if(amount > 1){
                 System.err.println("TaskType ID \"" + tasksList[i].getName() + "\" is listed twice.\nTerminating...");
                 System.exit(1);
-                break;
             }
             amount = 0;
         }
@@ -154,18 +161,19 @@ public class Test{
 
 
 
-        // JOBTYPES SECTION ---------------------------------------------------------------------------------------------------
-        Pattern jobsPattern = Pattern.compile("[(]JOBTYPES(?:\\s*[(][a-zA-Z0-9 ]+[)])+[)]");
+        // SELECTING THE JOBTYPES SECTION -------------------------------------------------------------------------------------
+        //Pattern for separating the whole JOBTYPES section from the text file
+        Pattern jobsPattern = Pattern.compile("[(]JOBTYPES(?:\\s+[(][a-zA-Z0-9 ]+\\.\\d+[)]|\\s+[(][a-zA-Z0-9 ]+[)])+[)]");
         Matcher match1 = jobsPattern.matcher(txt);
         String jobTypes = "";
         while(match1.find()) jobTypes += match1.group();
 
-        jobsPattern = Pattern.compile("[(][a-zA-Z0-9 ]+[)]");
+        jobsPattern = Pattern.compile("[(][a-zA-Z0-9 ]+\\.\\d+[)]|[(][a-zA-Z0-9 ]+[)]");
         match1 = jobsPattern.matcher(jobTypes);
         jobTypes = "";
         while(match1.find()) jobTypes += match1.group();
 
-        jobsPattern = Pattern.compile("[a-zA-Z0-9 ]+");
+        jobsPattern = Pattern.compile("[a-zA-Z0-9 ]+\\.\\d+|[a-zA-Z0-9 ]+");
         match1 = jobsPattern.matcher(jobTypes);
         jobTypes = "";
         ArrayList<String> jobs = new ArrayList<>();
@@ -175,87 +183,95 @@ public class Test{
             jobs.add(s);
         }
 
-        System.out.print("tasksList: ");
-        for(Task t : tasksList){
-            System.out.print(t.getName() + " ");
-        }
-        System.out.println();
-        boolean isValid = false;
+        // CHECKING THE TASKSLIST
+        // System.out.print("tasksList: "); 
+        // for(Task t : tasksList){
+        //     System.out.print(t.getName() + " ");
+        // }
+        // System.out.println();
+
         // Checking whether all tasktype IDs are declared in the TASKTYPES section --------------------------------------------
+        ArrayList<Job> jobsList = new ArrayList<>();
         for(int i = 0; i<jobs.size(); i++){
-            jobsPattern = Pattern.compile("[A-z0-9]+\\s([A-z0-9 ]*)");
+            ArrayList<Task> jobTasksList = new ArrayList<>();
+            //Pattern for separating JobID and tasks
+            jobsPattern = Pattern.compile("([A-z0-9]+)\\s([A-z0-9 ]*\\.\\d+|[A-z0-9 ]*)");
             match1 = jobsPattern.matcher(jobs.get(i));
             String jobTasks = "";
+            Job job = new Job();
             if(match1.find()){
-                jobTasks = match1.group(1);
-            }
-            System.out.println("+++++++++++++++++++++++++++++" + jobTasks);
-            jobsPattern = Pattern.compile("([A-z0-9]+\\s\\d)|([A-z0-9]+)");
-            match1 = jobsPattern.matcher(jobTasks);
-            jobTasks = "";
-            ArrayList<String> jobTasksList = new ArrayList<>();
-            while(match1.find()){
-                jobTasksList.add(match1.group());
+                job.setJobID(match1.group(1));
+                jobTasks = match1.group(2);
             }
 
-            for(int j = 0; j<jobTasksList.size(); j++){        // T1, T2, T3
-                String[] task = new String[2];
-                try{
-                    System.out.println(jobTasksList.get(j));
-                    task = jobTasksList.get(j).split(" ");
-                }catch(ArrayIndexOutOfBoundsException e){
-                    task[0] = jobTasksList.get(j);
-                    task[1] = "0";
-                }catch(NullPointerException e){
-                    task[0] = jobTasksList.get(j);
-                    task[1] = "0";
-                }finally{
-                    
-                }
-                for(int k = 0; k<tasksList.length; k++){       // TASKTYPES T1, T2, T3, T4, ...
-                    if(task[0].equals(tasksList[k].getName())){
-                        if(tasksList[k].getSize() == 0.0){
-                            if(task[1] == "0"){
-                                isValid = false;
-                            }
-                            else{
-                                isValid = true;
-                            }
-                        }
-                        else{
-                            isValid = true;
-                            break;
-                        }
-                    }
-                }
-                if(isValid){
-                    System.out.println("Was valid");
-                }
-                if(!isValid){
-                    System.err.println("TaskType ID \"" + jobTasksList.get(j) + "\" is not declared in TASKTYPES.\nTerminating...");
+            // Checking for duplicate JobIDs ----------------------------------------------------------------------------------
+            for(int j = 0; j<jobsList.size();j++){
+                if(job.getJobID().equals(jobsList.get(j).getJobID())){
+                    System.err.println("JobID \""+job.getJobID()+"\" is used twice.\nTerminting...");
                     System.exit(1);
                 }
-                isValid = false;
             }
-        }
-        System.out.println("[OK] All declared TaskType ID's");
 
-        //([A-z0-9]+\s\d)|([A-z0-9]+)
-        // Job[] jobsList = new Job[jobs.size()];
-        // for(int i = 0; i<jobs.size(); i++){
-        //     match1 = jobsPattern.matcher(jobs.get(i));
-        //     if(match1.find()){
-        //         jobsList[i].setJobName(match1.group(1));
-        //     }
-        //     String[] jobsDivided = jobs.get(i).split(" ");
-        //     for(String job : jobsDivided){
-        //         for(int j = 0; j<tasksList.length; j++){
-        //             if(tasksList[j].getName() == job){
-        //                 jobsList[i].addTask();
-        //             }
-        //         }
-        //     }
-        // }
-        // match1 = jobsPattern.matcher()
+            // CHECKING JOBID AND JOB'S TASKS FOR EACH JOB
+            // System.out.println("-----------------------------" + job.getJobID());
+            // System.out.println("+++++++++++++++++++++++++++++" + jobTasks);
+
+            //Pattern for separating tasks
+            jobsPattern = Pattern.compile("([A-z0-9]+\\s+\\d+\\.\\d+)|([A-z0-9]+\\s+\\d+)|([A-z0-9]+)");
+            match1 = jobsPattern.matcher(jobTasks);
+            jobTasks = "";
+            ArrayList<String> tasksSeparated = new ArrayList<>();
+            while(match1.find()){
+                tasksSeparated.add(match1.group());
+            }
+
+            // CHECKING EACH TASK SEPARATED (with or without size)
+            // for(String s: tasksSeparated){
+            //     System.out.println("." + s + ".");
+            // }
+
+            for(String s: tasksSeparated){
+                Task jobTask = new Task();
+                String[] splitten = s.split(" "); 
+                if(splitten.length == 2){
+                    jobTask.setName(splitten[0]);
+                    jobTask.setSize(Float.valueOf(splitten[1]));
+                    jobTasksList.add(jobTask);
+                }
+                else{
+                    jobTask.setName(splitten[0]);
+                    boolean validTask = false;
+                    for(int j = 0; j<tasksList.length; j++){
+                        if(tasksList[j].getName().equals(jobTask.getName())){
+                            if(tasksList[j].getSize() == 0.0f){ // Checking if the task size is declared ----------------------
+                                System.err.println("Task size for \""+ jobTask.getName() +"\" not declared.\nTerminating...");
+                                System.exit(1);
+                            }
+                            else{
+                                jobTask.setSize(tasksList[j].getSize());
+                                jobTasksList.add(jobTask);
+                            }
+                            validTask = true;
+                        }
+                    }
+                    if(!validTask){ // Checking if the tasktype is declared in TASKTYPES section ------------------------------
+                        System.err.println("Tasktype \""+ jobTask.getName() +"\" not declared int TASKTYPES.");
+                    }
+                }
+            }
+            job.setTasks(jobTasksList);
+            jobsList.add(job);
+        }
+        System.out.println("[OK] Unique JobIDs");
+        System.out.println("[OK] All TaskTypes have size declared");
+        System.out.println("[OK] All TaskType are valid");
+
+        for(Job j: jobsList){
+            System.out.println("jobID: " + j.getJobID());
+            for(int i = 0; i<j.getTasks().size(); i++){
+                System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getName(), j.getTasks().get(i).getSize());
+            }
+            System.out.println();
+        }
     }
 }
