@@ -19,6 +19,7 @@ public enum TaskType {
     TEZGAHSILME,
     BULASIKYIKAMA,
     SOSHAZIRLAMA,
+    IDLE,
     
 
 }

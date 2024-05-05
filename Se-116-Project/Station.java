@@ -7,6 +7,7 @@ public class Station{
     private int startingCapacity;
     private int capacity;
     private double speed;
+    private Task currentTask;
  
     public Station(String stationName, ArrayList<TaskType> supportedTaskTypes, int capacity, double speed) {
         this.stationName = stationName;
@@ -22,7 +23,7 @@ public class Station{
     
     public void work(Task task) {
         if (supportedTaskTypes.contains(task.getTaskType())) {
-            capacity--;
+            
             System.out.println( stationName +" doing job: " + task.getTaskType().toString().substring(0, 1).toUpperCase() + task.getTaskType().toString().substring(1).toLowerCase());
             System.out.println("duration: " + calculateTaskDuration(task));
            
@@ -69,6 +70,14 @@ public class Station{
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public Task getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(Task currentTask) {
+        this.currentTask = currentTask;
     }
     
 }

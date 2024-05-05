@@ -2,6 +2,10 @@ public class Task{
     private TaskType taskType;
     private int taskSize;
     
+    public Task(Task nbr) {
+        this.taskType = nbr.taskType;
+        this.taskSize = nbr.taskSize;
+    }
     public Task(TaskType taskType, int taskSize) {
         this.taskType = taskType;
         this.taskSize = taskSize;
