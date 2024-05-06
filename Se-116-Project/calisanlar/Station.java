@@ -7,7 +7,7 @@ public class Station{
     private int startingCapacity;
     private int capacity;
     private double speed;
-    private Task currentTask;
+    private Task currentTask=Test.Idle;
  
     public Station(String stationName, ArrayList<TaskType> supportedTaskTypes, int capacity, double speed) {
         this.stationName = stationName;

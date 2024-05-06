@@ -79,7 +79,7 @@ public class Test {
                         break;
                         
                     }
-                    if (stationList.get(j).getSupportedTaskTypes().contains(activeTasks.get(i).getTaskType()) && stationList.get(j).getCapacity()+1 > 0) {
+                    if (stationList.get(j).getSupportedTaskTypes().contains(activeTasks.get(i).getTaskType()) && stationList.get(j).getCapacity()+1 > 0&&stationList.get(j).getCurrentTask()==Idle)  {
                         stationList.get(j).setCapacity(stationList.get(j).getCapacity()-1);
                         stationList.get(j).setCurrentTask(new Task (activeTasks.get(i)));
                         
@@ -105,6 +105,7 @@ public class Test {
             }
             for (Station station : stationList) {
                 if (station.getCurrentTask().getTaskSize()<=15) {
+                    station.setCurrentTask(Idle);
                     station.setCapacity(station.getCapacity()+1);
                    
 
