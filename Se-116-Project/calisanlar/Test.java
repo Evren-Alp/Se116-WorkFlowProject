@@ -7,13 +7,13 @@ import java.util.Scanner;
 
 
 public class Test {
-    public static Task Idle=new Task(TaskType.IDLE, 0);
+    public static Task Idle=new Task("IDLE", 0);
     public static int tur=1;
     public static ArrayList<Task> activeTasks= new ArrayList<>();
     public static ArrayList<Station> stationList= new ArrayList<>();
     public static ArrayList<Job> jobList= new ArrayList<>();
     public static void describeJob(Job job) {
-        System.out.println("Job Title: " + job.getjobName());
+        System.out.println("Job ID: " + job.getJobID());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
         System.out.println("Tasks:");
         for (Task task : job.getTasks()) {
@@ -45,7 +45,7 @@ public class Test {
         System.out.println("\nMinute: "+(tur-1)*15);
             System.out.println("jobs: ");
             for (Job job : jobList) {
-                System.out.println(job.getjobName()+"/"+job.getStatus()+"/Remaining: "+job.getJobDuration());
+                System.out.println(job.getJobName()+"/Remaining: "+job.getJobDuration());
             }
             System.out.print("\nStations: ");
             for (Station station : stationList) {
@@ -69,11 +69,21 @@ public class Test {
         tur = 1;
         int uyum=0;
         while (activeTasks.isEmpty()==false) {
+            if (activeTasks.isEmpty()==true) {
+                break;
+                
+            }
+
             turcapacity = 0;
             for (Station station : stationList) {
                 turcapacity += station.getCapacity();
             }
             for (int i = 0; i < turcapacity; ) {
+                if (activeTasks.isEmpty()==true) {
+                    break;
+                    
+                }
+
                 for (int j = 0; j < stationList.size();) {
                     if (activeTasks.isEmpty()==true) {
                         break;
@@ -134,59 +144,23 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        Task Idle = new Task(TaskType.IDLE, 0);
-        Task dograma = new Task(TaskType.DOGRAMA, 3); 
-        Task firinlama = new Task(TaskType.FIRINLAMA, 20); 
-        Task haslama = new Task(TaskType.HASLAMA, 20); 
-        Task kizartma = new Task(TaskType.KIZARTMA, 10);
-        Task tabaklama = new Task(TaskType.TABAKLAMA, 5); 
-        Task siparis = new Task(TaskType.SIPARISALMA, 5);
-        Task getir = new Task(TaskType.SIPARISGOTURME,15 );
-        Task bekle = new Task(TaskType.BEKLEME, 30);
-        Task hesap = new Task(TaskType.HESAPGOTURME, 5);
+       
+   
 
-        ArrayList<TaskType> garsonAblility = new ArrayList<>();
-        garsonAblility.add(TaskType.SIPARISALMA);
-        garsonAblility.add(TaskType.SIPARISGOTURME);
-        garsonAblility.add(TaskType.BEKLEME);
-        garsonAblility.add(TaskType.HESAPGOTURME);
-        garsonAblility.add(TaskType.MASASILME);
-        garsonAblility.add(TaskType.ICECEKGETIRME);
+        ArrayList<TaskType> stationAblility1 = new ArrayList<>();
+       
         
-        ArrayList<TaskType> mutfakAblility = new ArrayList<>();
-        mutfakAblility.add(TaskType.DOGRAMA);
-        mutfakAblility.add(TaskType.FIRINLAMA);
-        mutfakAblility.add(TaskType.HASLAMA);
-        mutfakAblility.add(TaskType.KIZARTMA);
-        mutfakAblility.add(TaskType.TABAKLAMA);
+        ArrayList<TaskType> stationAblility2 = new ArrayList<>();
+       
+        
 
-        ArrayList<Task> siparisAlmaTasks = new ArrayList<>();
-        siparisAlmaTasks.add(siparis);
-        siparisAlmaTasks.add(getir);
-        siparisAlmaTasks.add(bekle);
-        siparisAlmaTasks.add(hesap);
-    
-        ArrayList<Task> kizartmaTasks = new ArrayList<>();
-        kizartmaTasks.add(dograma);
-        kizartmaTasks.add(kizartma);
-        kizartmaTasks.add(tabaklama);
-
-        Station Garson=new Station("Asli", garsonAblility, 1, 1.0);
-        Station Mutfak=new Station("Mutfak", mutfakAblility, 1, 1.0);
-        Job YeniMusteri = new Job("Yeni musteri", 60, siparisAlmaTasks);
-        Job PatatesKizartmasi = new Job("Patates Kizartmasi", 35, kizartmaTasks);
-        ekle(PatatesKizartmasi);
-        ekle(YeniMusteri);
-    
-        jobList.add(YeniMusteri);
-        jobList.add(PatatesKizartmasi);
-        stationList.add(Garson);
-        stationList.add(Mutfak);
+       
+       
         basla();
 
 
         // Func Req. 1: getting the name of the workflow and the job file
-      //  String workflowFile = args[0];
-        //String jobFile = args[1];
+      // String workflowFile = args[0];
+      //  String jobFile = args[1];
     }  
 }

@@ -1,31 +1,39 @@
-public class Task{
-    private TaskType taskType;
-    private int taskSize;
-    
-    public Task(Task nbr) {
-        this.taskType = nbr.taskType;
-        this.taskSize = nbr.taskSize;
+class Task{
+    private String name;
+    private float size;
+    private TaskType taskType;{
+        
     }
-    public Task(TaskType taskType, int taskSize) {
-        this.taskType = taskType;
-        this.taskSize = taskSize;
+    public Task(Task task){
+        this.name = task.name;
+        this.size = task.size;
     }
-    // Setters
-    public void setTaskType(TaskType taskType) {
-        this.taskType = taskType;
-    }
-    
-    public void setTaskSize(int taskSize) {
-        this.taskSize = taskSize;
-    }
-    
-    // Getters
     public TaskType getTaskType() {
         return taskType;
     }
-    
-    public int getTaskSize() {
-        return taskSize;
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
-    
+    public Task(String name, float size){
+        this.name = name;
+        this.size = size;
+    }
+    public Task(String name){
+        this.name = name;
+    }
+    public Task(){
+
+    }
+    public String getTaskName(){
+        return this.name;
+    }
+    public void setTaskName(String name){
+        this.name = name;
+    }
+    public float getTaskSize(){
+        return this.size;
+    }
+    public void setTaskSize(float size){
+        this.size = size;
+    }
 }

@@ -5,71 +5,24 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Task{
-    private String name;
-    private float size;
-    public Task(String name, float size){
-        this.name = name;
-        this.size = size;
-    }
-    public Task(String name){
-        this.name = name;
-    }
-    public Task(){
 
-    }
-    public String getName(){
-        return this.name;
-    }
-    public void setName(String name){
-        this.name = name;
-    }
-    public float getSize(){
-        return this.size;
-    }
-    public void setSize(float size){
-        this.size = size;
-    }
-}
-class Job{
-    private String jobID = "";
-    private ArrayList<Task> tasks;
-    public Job(String jobID, ArrayList<Task> tasks){
-        this.jobID = jobID;
-        this.tasks = tasks;
-    }
-    public Job(String jobID){
-        this.jobID = jobID;
-    }
-    public Job(){
 
-    }
-    public void addTask(Task task){
-        this.tasks.add(task);
-    }
-    public ArrayList<Task> getTasks(){
-        return this.tasks;
-    }
-    public void setTasks(ArrayList<Task> tasks){
-        this.tasks = tasks;
-    }
-    public String getJobID(){
-        return this.jobID;
-    }
-    public void setJobID(String jobID){
-        this.jobID = jobID;
-    }
-}
-
-public class Test{
+public class Testoku{
+    public static String txt = "";
     public static void main(String[] args) throws FileNotFoundException {
+       try {
         File file = new File("Workflow.txt");
         Scanner sc = new Scanner(file);
-        String txt = "";
+        txt = "";
         while(sc.hasNextLine()){
             txt += sc.nextLine();
             txt += "\n";
         }
+        
+       } catch (FileNotFoundException e) {
+        System.err.println("File not found.");
+       }
+        
         // System.out.println(txt);
 
         // Checking for Syntax Errors: ----------------------------------------------------------------------------------------
@@ -142,13 +95,13 @@ public class Test{
         for(int i = 0; i<tasksList.length; i++){
             // System.out.println(tasksList[i].getName());
             for(int j = 0; j<tasksList.length; j++){
-                if(tasksList[i].getName().equals(tasksList[j].getName())){
+                if(tasksList[i].getTaskName().equals(tasksList[j].getTaskName())){
                     amount++;
                 }
                 // System.out.println(tasksList[j].getName() + "  amount: " + amount);
             }
             if(amount > 1){
-                System.err.println("TaskType ID \"" + tasksList[i].getName() + "\" is listed twice.\nTerminating...");
+                System.err.println("TaskType ID \"" + tasksList[i].getTaskName() + "\" is listed twice.\nTerminating...");
                 System.exit(1);
             }
             amount = 0;
@@ -234,28 +187,28 @@ public class Test{
                 Task jobTask = new Task();
                 String[] splitten = s.split(" "); 
                 if(splitten.length == 2){
-                    jobTask.setName(splitten[0]);
-                    jobTask.setSize(Float.valueOf(splitten[1]));
+                    jobTask.setTaskName(splitten[0]);
+                    jobTask.setTaskSize(Float.valueOf(splitten[1]));
                     jobTasksList.add(jobTask);
                 }
                 else{
-                    jobTask.setName(splitten[0]);
+                    jobTask.setTaskName(splitten[0]);
                     boolean validTask = false;
                     for(int j = 0; j<tasksList.length; j++){
-                        if(tasksList[j].getName().equals(jobTask.getName())){
-                            if(tasksList[j].getSize() == 0.0f){ // Checking if the task size is declared ----------------------
-                                System.err.println("Task size for \""+ jobTask.getName() +"\" not declared.\nTerminating...");
+                        if(tasksList[j].getTaskName().equals(jobTask.getTaskName())){
+                            if(tasksList[j].getTaskSize() == 0.0f){ // Checking if the task size is declared ----------------------
+                                System.err.println("Task size for \""+ jobTask.getTaskName() +"\" not declared.\nTerminating...");
                                 System.exit(1);
                             }
                             else{
-                                jobTask.setSize(tasksList[j].getSize());
+                                jobTask.setTaskSize(tasksList[j].getTaskSize());
                                 jobTasksList.add(jobTask);
                             }
                             validTask = true;
                         }
                     }
                     if(!validTask){ // Checking if the tasktype is declared in TASKTYPES section ------------------------------
-                        System.err.println("Tasktype \""+ jobTask.getName() +"\" not declared int TASKTYPES.");
+                        System.err.println("Tasktype \""+ jobTask.getTaskName() +"\" not declared int TASKTYPES.");
                     }
                 }
             }
@@ -269,7 +222,7 @@ public class Test{
         for(Job j: jobsList){
             System.out.println("jobID: " + j.getJobID());
             for(int i = 0; i<j.getTasks().size(); i++){
-                System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getName(), j.getTasks().get(i).getSize());
+                System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getTaskName(), j.getTasks().get(i).getTaskSize());
             }
             System.out.println();
         }

@@ -1,54 +1,45 @@
 import java.util.ArrayList;
 
-public class Job {
-    private String status;
+class Job{
     private String jobName;
-    private int duration;
-    private ArrayList<Task> tasks;
-
-    public Job() {
-        this.jobName = "";
-        this.duration = 0;
-        this.tasks = new ArrayList<Task>();
-    }
-    
-    public Job(String jobName, int duration, ArrayList<Task> tasks) {
-        this.status = "Unfinished";
-        this.jobName = jobName;
-        this.duration = duration;
-        this.tasks = tasks;
-    }
-
-    public String getjobName() {
+    public String getJobName() {
         return jobName;
     }
-
-    public void setjobName(String jobName) {
+    public void setJobName(String jobName) {
         this.jobName = jobName;
     }
-
     public int getJobDuration() {
-        return duration;
+        return jobDuration;
     }
-
-    public void setJobDuration(int duration) {
-        this.duration = duration;
+    public void setJobDuration(int jobDuration) {
+        this.jobDuration = jobDuration;
     }
-
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(ArrayList<Task> tasks) {
+    private int jobDuration;
+    private String jobID = "";
+    private ArrayList<Task> tasks;
+    public Job(String jobID, ArrayList<Task> tasks){
+        this.jobID = jobID;
         this.tasks = tasks;
     }
-
-    public String getStatus() {
-        return status;
+    public Job(String jobID){
+        this.jobID = jobID;
     }
+    public Job(){
 
-    public void setStatus(String status) {
-        this.status = status;
     }
-    
+    public void addTask(Task task){
+        this.tasks.add(task);
+    }
+    public ArrayList<Task> getTasks(){
+        return this.tasks;
+    }
+    public void setTasks(ArrayList<Task> tasks){
+        this.tasks = tasks;
+    }
+    public String getJobID(){
+        return this.jobID;
+    }
+    public void setJobID(String jobID){
+        this.jobID = jobID;
+    }
 }
