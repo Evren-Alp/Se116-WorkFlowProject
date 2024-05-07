@@ -180,7 +180,8 @@ public class Test {
        
         
     try {
-        jobList=Testoku.oku();
+        Testoku t = new Testoku("D:\\Documents\\GitHub\\Se-116-Project\\Se-116-Project\\Reading from text file (NOT DONE YET)\\Workflow.txt")
+        jobList=t.getJobList();
     } catch (FileNotFoundException e) {
         System.err.println("annen nerede?");
     }

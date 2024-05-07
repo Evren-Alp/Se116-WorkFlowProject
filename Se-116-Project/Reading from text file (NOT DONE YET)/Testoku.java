@@ -5,26 +5,26 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 public class Testoku{
-    public static ArrayList<Job> jobList = new ArrayList<>();
-    public static String txt = "";
-    public static ArrayList<Job> oku() throws FileNotFoundException {
-       try {
-        File file = new File("D:\\Documents\\GitHub\\Se-116-Project\\Se-116-Project\\Reading from text file (NOT DONE YET)\\Workflow.txt");
-        Scanner sc = new Scanner(file);
-        txt = "";
-        while(sc.hasNextLine()){
-            txt += sc.nextLine();
-            txt += "\n";
+    private boolean debugging = true;
+    private String txt = "";
+    private Task[] tasksList;
+    private ArrayList<Job> jobList = new ArrayList<>();
+    private ArrayList<Station2> stationsList = new ArrayList<>();
+    public Testoku(String pathname){
+        try {
+            File file = new File(pathname);
+            Scanner sc = new Scanner(file);
+            txt = "";
+            while(sc.hasNextLine()){
+                txt += sc.nextLine();
+                txt += "\n";
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found.\nTerminating...");
+            System.exit(1);
         }
-        sc.close();
-       } catch (FileNotFoundException e) {
-        System.err.println("File not found.");
-       }
-        
-        // System.out.println(txt);
 
         // Checking for Syntax Errors: ----------------------------------------------------------------------------------------
         // Pattern for checking negative task sizes
@@ -41,7 +41,7 @@ public class Testoku{
             System.out.println("Terminating...");
             System.exit(1);
         }
-        else System.out.println("[OK] Tasktype sizes");
+        else if(debugging) System.out.println("[OK] Tasktype sizes");
         
         // Pattern to check for invalid tasktypeIDs ------ SHOULD BE DEPENDANT ON TASK NAMES NEEDS TO BE CHANGED LATER!! ------
         boolean found3 = false;
@@ -50,14 +50,14 @@ public class Testoku{
         while(invalidTaskTypeIDMatcher.find()){
             found3 = true;
             System.err.println("Syntax Error: There is a invalid tasktypeID \"" + invalidTaskTypeIDMatcher.group() +
-                             "\" at indexes: " + invalidTaskTypeIDMatcher.start() + " - " + invalidTaskTypeIDMatcher.end());
+                                "\" at indexes: " + invalidTaskTypeIDMatcher.start() + " - " + invalidTaskTypeIDMatcher.end());
         }
         if(found3){
             System.out.println("tasktypeID should not start with a number.");
             System.out.println("Terminating...");
             System.exit(1);
         }
-        else System.out.println("[OK] Tasktype IDs");
+        else if(debugging) System.out.println("[OK] Tasktype IDs");
         
         // TASKTYPES SECTION --------------------------------------------------------------------------------------------------
         // Pattern for taking the tasks from the TASKTYPES section from the text file
@@ -78,8 +78,8 @@ public class Testoku{
         }
 
 
-        // SAVING TASK ID AND TASK SIZE INTO TASK A LIST ----------------------------------------------------------------------
-        Task[] tasksList = new Task[tasks.size()];
+        // SAVING TASK ID AND TASK SIZE INTO A TASK LIST ----------------------------------------------------------------------
+        tasksList = new Task[tasks.size()];
         for(int i = 0; i<tasks.size(); i++){
             String[] keyVal = tasks.get(i).split(" ");
             if(keyVal.length == 2){
@@ -107,13 +107,7 @@ public class Testoku{
             }
             amount = 0;
         }
-        System.out.println("[OK] No tasktype duplicates.");
-
-
-
-
-
-
+        if(debugging) System.out.println("[OK] No tasktype duplicates.");
 
         // SELECTING THE JOBTYPES SECTION -------------------------------------------------------------------------------------
         //Pattern for separating the whole JOBTYPES section from the text file
@@ -145,7 +139,6 @@ public class Testoku{
         // System.out.println();
 
         // Checking whether all tasktype IDs are declared in the TASKTYPES section --------------------------------------------
-        
         for(int i = 0; i<jobs.size(); i++){
             ArrayList<Task> jobTasksList = new ArrayList<>();
             //Pattern for separating JobID and tasks
@@ -209,19 +202,161 @@ public class Testoku{
                         }
                     }
                     if(!validTask){ // Checking if the tasktype is declared in TASKTYPES section ------------------------------
-                        System.err.println("Tasktype \""+ jobTask.getTaskName() +"\" not declared int TASKTYPES.");
+                        System.err.println("Tasktype \""+ jobTask.getTaskName() +"\" not declared in TASKTYPES.");
                     }
                 }
             }
             job.setTasks(jobTasksList);
             jobList.add(job);
         }
-        System.out.println("[OK] Unique JobIDs");
-        System.out.println("[OK] All TaskTypes have size declared");
-        System.out.println("[OK] All TaskType are valid");
+        if(debugging){
+            System.out.println("[OK] Unique JobIDs");
+            System.out.println("[OK] All TaskTypes have size declared");
+            System.out.println("[OK] All TaskType are valid");
+        }
 
-       
-        return jobList;
+
+        // STATIONS SECTION ---------------------------------------------------------------------------------------------------
+        // Pattern for all of the stations
+        Pattern pattern1 = Pattern.compile("([(]STATIONS\\s+([()A-z0-9.\\s]+)[)])");
+        Matcher matcher1 = pattern1.matcher(txt);
+        txt = "";
+        String syntaxCheck = "";
+        if(matcher1.find()){
+            syntaxCheck = matcher1.group(1);
+            txt = matcher1.group(2);
+        }
+        if(txt.equals("")){
+            System.err.println("Wrong syntax for the STATIONS section.\nTerminating...");
+            System.exit(1);
+        }
+        if(!syntaxCheck.endsWith("))")){
+            System.err.println("STATIONS section is not closed. \")\" missing.\nTerminating...");
+            System.exit(1);
+        }
+        if(syntaxCheck.endsWith(")))")){
+            System.err.println("SyntaxError at the end of the STATIONS section. Extra \")\"s used.\nTerminating...");
+            System.exit(1);
+        }
+        
+        // Pattern for separating each station in stations
+        pattern1 = Pattern.compile("[(]([()A-z0-9 .]+)[)]");
+        matcher1 = pattern1.matcher(txt);
+        ArrayList<String> stationsString = new ArrayList<>();
+        while(matcher1.find()){
+            stationsString.add(matcher1.group(1));
+        }
+        stationsList = new ArrayList<>();
+        // Pattern for separating the first 4 sections of each station + all of the tasks (tasks not separated!)
+        for(String s : stationsString){
+            pattern1 = Pattern.compile("([A-z0-9]+)\\s+(\\d+.\\d+|\\d)*\\s*(N|Y)\\s+(N|Y)\\s*([A-z0-9 .]+)?");
+            matcher1 = pattern1.matcher(s);
+            while(matcher1.find()){
+                boolean maxCapDefined = true;
+                int maxCap = 0;
+                if(matcher1.group(2) == null){
+                    maxCapDefined = false;
+                } else{
+                    maxCap = Integer.parseInt(matcher1.group(2));
+                }
+                String name = matcher1.group(1);
+                boolean multi = false;
+                boolean fifo = true;
+                ArrayList<Task> stationTasksList = new ArrayList<>();
+                if(matcher1.group(3).equals("N")){
+                    multi = false;
+                } else if(matcher1.group(3).equals("Y")){
+                    multi = true;
+                } else{
+                    System.err.println("Invalid MULTIFLAG.\nTerminating...");
+                    System.exit(1);
+                }
+                if(matcher1.group(4).equals("N")){
+                    fifo = false;
+                } else if(matcher1.group(4).equals("Y")){
+                    fifo = true;
+                } else{
+                    System.err.println("Invalid FIFOFLAG.\nTerminating...");
+                    System.exit(1);
+                }
+                // Pattern for serparating tasks.
+                Pattern pattern2 = Pattern.compile("([A-z]+\\d+\\s+\\d+\\.\\d+|[A-z]+\\d+\\s+\\d+|[A-z]+\\d+)");
+                Matcher matcher2 = pattern2.matcher(matcher1.group(5));
+                ArrayList<String> tasks2 = new ArrayList<>();
+                while(matcher2.find()){
+                    tasks2.add(matcher2.group(1));
+                }
+                //Separating TaskID and sizes, checking for error if size is not declared anywhere.
+                for(String ss: tasks2){
+                    Task stationTask = new Task();
+                    String[] splitten = ss.split(" ");
+                    if(splitten.length == 2){
+                        stationTask.setTaskName(splitten[0]);
+                        stationTask.setTaskSize(Float.valueOf(splitten[1]));
+                        stationTasksList.add(stationTask);
+                    }
+                    else{
+                        stationTask.setTaskName(splitten[0]);
+                        boolean isValid = false;
+                        for(int i = 0; i<tasksList.length; i++){
+                            if(tasksList[i].getTaskName().equals(stationTask.getTaskName())){
+                                if(tasksList[i].getTaskSize() == 0.0f){ // Checking if the task size is declared ----------------------
+                                    System.err.println("Task size for \""+ stationTask.getTaskName() +"\" not declared.\nTerminating...");
+                                    System.exit(1);
+                                }
+                                else{
+                                    stationTask.setTaskSize(tasksList[i].getTaskSize());
+                                    stationTasksList.add(stationTask);
+                                }
+                                isValid = true;
+                            }
+                        }
+                        if(!isValid){ // Checking if the tasktype is declared in TASKTYPES section ------------------------------
+                            System.err.println("Tasktype \""+ stationTask.getTaskName() +"\" not declared in TASKTYPES.");
+                        }
+                    }
+                }
+
+                if(maxCapDefined){
+                    Station2 station = new Station2(name, maxCap, multi, fifo);
+                    station.setTasksList(stationTasksList);
+                    stationsList.add(station);
+                } else if(!maxCapDefined){
+                    Station2 station = new Station2(name, multi, fifo);
+                    station.setTasksList(stationTasksList);
+                    stationsList.add(station);
+                }
+            }
+        }
     }
-    
+    public void printJobsInfo(){ // getJobID|getTasks
+        for(Job j : jobList){
+            System.out.println("Job ID: " + j.getJobID());
+            for(Task t: j.getTasks()){
+                System.out.println("---TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
+            }
+        }
     }
+    public void printStationsInfo(){
+        for(Station2 s : this.stationsList){
+            System.out.println("Station ID: " + s.getName());
+            for(Task t : s.getTasks()){
+                System.out.println("---TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
+            }
+        }
+    }
+    public void printTasksInfo(){
+        for(Task t: tasksList){
+            System.out.println("TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
+        }
+    }
+    public Task[] getTasksList(){
+        return this.tasksList;
+    }
+    public ArrayList<Job> getJobList(){
+        return this.jobList;
+    }
+    public ArrayList<Station2> getStations(){
+        return this.stationsList;
+    }
+}

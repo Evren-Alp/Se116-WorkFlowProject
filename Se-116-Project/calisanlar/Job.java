@@ -2,6 +2,9 @@ import java.util.ArrayList;
 
 class Job{
     private String jobName;
+    private float jobDuration=10;
+    private String jobID = "";
+    private ArrayList<Task> tasks;
     public String getJobName() {
         return jobName;
     }
@@ -14,9 +17,6 @@ class Job{
     public void setJobDuration(float jobDuration) {
         this.jobDuration = jobDuration;
     }
-    private float jobDuration=10;
-    private String jobID = "";
-    private ArrayList<Task> tasks;
     public Job(String jobID, ArrayList<Task> tasks){
         this.jobID = jobID;
         this.tasks = tasks;
