@@ -8,13 +8,13 @@ class Job{
     public void setJobName(String jobName) {
         this.jobName = jobName;
     }
-    public int getJobDuration() {
+    public float getJobDuration() {
         return jobDuration;
     }
-    public void setJobDuration(int jobDuration) {
+    public void setJobDuration(float jobDuration) {
         this.jobDuration = jobDuration;
     }
-    private int jobDuration;
+    private float jobDuration=10;
     private String jobID = "";
     private ArrayList<Task> tasks;
     public Job(String jobID, ArrayList<Task> tasks){

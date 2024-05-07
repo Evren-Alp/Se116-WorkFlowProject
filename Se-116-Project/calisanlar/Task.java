@@ -1,4 +1,4 @@
-class Task{
+class Task extends Job{
     private String name;
     private float size;
     private TaskType taskType;{
@@ -14,9 +14,14 @@ class Task{
     public void setTaskType(TaskType taskType) {
         this.taskType = taskType;
     }
-    public Task(String name, float size){
+    public Task(String name, float size, TaskType taskType){
         this.name = name;
         this.size = size;
+        this.taskType = taskType;
+    }public Task(String name, float size){
+        this.name = name;
+        this.size = size;
+        this.taskType = taskType;
     }
     public Task(String name){
         this.name = name;

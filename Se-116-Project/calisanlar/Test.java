@@ -1,15 +1,15 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 
 
 public class Test {
-    public static Task Idle=new Task("IDLE", 0);
+    public static Task Idle=new Task("IDLE", 0,TaskType.T0);
     public static int tur=1;
-    public static ArrayList<Task> activeTasks= new ArrayList<>();
     public static ArrayList<Station> stationList= new ArrayList<>();
     public static ArrayList<Job> jobList= new ArrayList<>();
     public static void describeJob(Job job) {
@@ -22,21 +22,21 @@ public class Test {
         }
     }
 
-    public static void ekle(Job job){
-        ArrayList<Task> is=job.getTasks();
-        activeTasks.addAll(is);
+    
 
 
 
-    }
+    
     public static void displayActiveTasks(){
-        if (activeTasks.size()<1){
+        if (jobList.isEmpty()){
             System.out.println("active task is empty");
         }
-        if (activeTasks.size()>1) {
-            for (int i = 0; i < activeTasks.size(); i++) {
-                System.out.println(activeTasks.get(i).getTaskType());
-                
+        if (jobList.isEmpty()==false) {
+            for (Job job : jobList) {
+                for (int i = 0; i < jobList.size(); i++) {
+                    System.out.println(job.getTasks().get(i).getTaskType());
+                    
+                }
             }
         }
        
@@ -45,7 +45,7 @@ public class Test {
         System.out.println("\nMinute: "+(tur-1)*15);
             System.out.println("jobs: ");
             for (Job job : jobList) {
-                System.out.println(job.getJobName()+"/Remaining: "+job.getJobDuration());
+                System.out.println(job.getJobID()+"/Remaining: "+job.getJobDuration());
             }
             System.out.print("\nStations: ");
             for (Station station : stationList) {
@@ -67,67 +67,57 @@ public class Test {
         int turcapacity = 0;
         yaz();
         tur = 1;
-        int uyum=0;
-        while (activeTasks.isEmpty()==false) {
-            if (activeTasks.isEmpty()==true) {
+        
+        boolean dur=false;
+        boolean uyum=false;
+        while (dur==false) {
+            for (Job job : jobList) {
+                if (job.getTasks().isEmpty()) {
+                    dur=true;
+                }
+            } 
+            if (dur==true) {
+                System.out.println("\nAll jobs are done");
                 break;
-                
             }
+            for (int i = 0; i < jobList.size(); i++) {
+                for (int j = 0; j < jobList.get(i).getTasks().size(); j++) {
+                    for (int k = 0; k < stationList.size(); k++) {
+                        if (stationList.get(k).getSupportedTaskTypes().contains(jobList.get(i).getTasks().get(j).getTaskType())) {
+                            if (stationList.get(k).getCapacity() > 0&&stationList.get(k).getCurrentTask()==Idle) {
+                                stationList.get(k).work(jobList.get(i).getTasks().get(j));
+                                stationList.get(k).setCurrentTask(jobList.get(i).getTasks().get(j));
+                                stationList.get(k).setCapacity(stationList.get(k).getCapacity() - 1);
+                                jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
+                                j=0;
+                                k=0;
+                                i=0;
+                                if (jobList.get(i).getJobDuration() <= 0) {
+                                    jobList.get(i).getTasks().remove(j);
+                                    stationList.get(k).setCurrentTask(Idle);
+                                    stationList.get(k).setCapacity(stationList.get(k).getCapacity()+1);
+                                    
 
-            turcapacity = 0;
-            for (Station station : stationList) {
-                turcapacity += station.getCapacity();
-            }
-            for (int i = 0; i < turcapacity; ) {
-                if (activeTasks.isEmpty()==true) {
-                    break;
+                                    
+                                }
+                            }
+                            
+                        }
+                        if (uyum==true){
+                            uyum=false;
+                            break;
+                        }
+                        if (uyum==false&&stationList.isEmpty()==false&&jobList.isEmpty()==false) {
+                            System.out.println("no station available for task ");
+                        }
+                    }
                     
                 }
-
-                for (int j = 0; j < stationList.size();) {
-                    if (activeTasks.isEmpty()==true) {
-                        break;
-                        
-                    }
-                    if (stationList.get(j).getSupportedTaskTypes().contains(activeTasks.get(i).getTaskType()) && stationList.get(j).getCapacity()+1 > 0&&stationList.get(j).getCurrentTask()==Idle)  {
-                        stationList.get(j).setCapacity(stationList.get(j).getCapacity()-1);
-                        stationList.get(j).setCurrentTask(new Task (activeTasks.get(i)));
-                        
-                        activeTasks.remove(i);
-                        i=0;
-                        j=0;
-                        uyum=1;
-                        turcapacity--;
-                        break;
-                    }
-                    else{
-                        j++;
-                    } 
-                }
-                if (uyum==0) {
-                    System.out.println("No station available for the task");
-                    i++;
-            
-                }
-                if (uyum==1) {
-                    uyum=0;
-                }
-            }
-            for (Station station : stationList) {
-                if (station.getCurrentTask().getTaskSize()<=15) {
-                    station.setCurrentTask(Idle);
-                    station.setCapacity(station.getCapacity()+1);
-                   
-
-                }
-                else{
-                    station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-15);
-                }
+                
             }
             tur++;
             yaz();
-            
-        }
+        }    
     }
     //write method??
     public static void writeToFile(String content) {
@@ -144,15 +134,42 @@ public class Test {
     }
 
     public static void main(String[] args) {
-       
+        ArrayList<Task> taskler1=new ArrayList<>();
+        ArrayList<Task> taskler2=new ArrayList<>(); 
+        Task task1 = new Task("task1", 15, TaskType.T1);
+        Task task2 = new Task("task2", 30, TaskType.T2);
+        Task task3 = new Task("task3", 45, TaskType.T3);
+        Task task4 = new Task("task4", 60, TaskType.T4);
+        
+        taskler1.add(task1);
+        taskler1.add(task2);
+        taskler2.add(task3);
+        taskler2.add(task4);
+
+       Job job1 = new Job("job1", new ArrayList<Task>(taskler1) );
+       Job job2 = new Job("job2",new ArrayList<Task>(taskler2));
+
    
+        
+        
+        jobList.add(job1);
+        jobList.add(job2);
+
 
         ArrayList<TaskType> stationAblility1 = new ArrayList<>();
+        stationAblility1.add(TaskType.T1);
+        stationAblility1.add(TaskType.T2);
        
         
         ArrayList<TaskType> stationAblility2 = new ArrayList<>();
+        stationAblility2.add(TaskType.T3);
+        stationAblility2.add(TaskType.T4);
+
+        Station station1 = new Station("station1", stationAblility1, 1,1);
+        Station station2 = new Station("station2", stationAblility2, 1, 1);
        
-        
+        stationList.add(station1);
+        stationList.add(station2);
 
        
        
