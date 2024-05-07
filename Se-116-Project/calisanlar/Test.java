@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -11,7 +12,7 @@ public class Test {
     public static Task Idle=new Task("IDLE", 0,TaskType.T0);
     public static int tur=1;
     public static ArrayList<Station> stationList= new ArrayList<>();
-    public static ArrayList<Job> jobList= new ArrayList<>();
+    public static ArrayList<Job> jobList= Testoku.jobList;
     public static void describeJob(Job job) {
         System.out.println("Job ID: " + job.getJobID());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
@@ -150,8 +151,21 @@ public class Test {
        Job job2 = new Job("job2",new ArrayList<Task>(taskler2));
 
    
+       for(Job j: jobList){
+        System.out.println("jobID: " + j.getJobID());
+        for(int i = 0; i<j.getTasks().size(); i++){
+            System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getTaskName(), j.getTasks().get(i).getTaskSize());
+        }
+        System.out.println();
+       
+    }
         
-        
+    try {
+        jobList=Testoku.oku();
+    } catch (FileNotFoundException e) {
+        System.err.println("annen nerede?");
+    }
+    
         jobList.add(job1);
         jobList.add(job2);
 
@@ -170,10 +184,18 @@ public class Test {
        
         stationList.add(station1);
         stationList.add(station2);
+    
+        for(Job j: jobList){
+            System.out.println("jobID: " + j.getJobID());
+            for(int i = 0; i<j.getTasks().size(); i++){
+                System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getTaskName(), j.getTasks().get(i).getTaskSize());
+            }
+            System.out.println();
+        }
 
        
        
-        basla();
+       
 
 
         // Func Req. 1: getting the name of the workflow and the job file

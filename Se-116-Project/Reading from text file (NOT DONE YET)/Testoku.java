@@ -8,17 +8,18 @@ import java.util.regex.Pattern;
 
 
 public class Testoku{
+    public static ArrayList<Job> jobList = new ArrayList<>();
     public static String txt = "";
-    public static void main(String[] args) throws FileNotFoundException {
+    public static ArrayList<Job> oku() throws FileNotFoundException {
        try {
-        File file = new File("Workflow.txt");
+        File file = new File("D:\\Documents\\GitHub\\Se-116-Project\\Se-116-Project\\Reading from text file (NOT DONE YET)\\Workflow.txt");
         Scanner sc = new Scanner(file);
         txt = "";
         while(sc.hasNextLine()){
             txt += sc.nextLine();
             txt += "\n";
         }
-        
+        sc.close();
        } catch (FileNotFoundException e) {
         System.err.println("File not found.");
        }
@@ -144,7 +145,7 @@ public class Testoku{
         // System.out.println();
 
         // Checking whether all tasktype IDs are declared in the TASKTYPES section --------------------------------------------
-        ArrayList<Job> jobsList = new ArrayList<>();
+        
         for(int i = 0; i<jobs.size(); i++){
             ArrayList<Task> jobTasksList = new ArrayList<>();
             //Pattern for separating JobID and tasks
@@ -158,8 +159,8 @@ public class Testoku{
             }
 
             // Checking for duplicate JobIDs ----------------------------------------------------------------------------------
-            for(int j = 0; j<jobsList.size();j++){
-                if(job.getJobID().equals(jobsList.get(j).getJobID())){
+            for(int j = 0; j<jobList.size();j++){
+                if(job.getJobID().equals(jobList.get(j).getJobID())){
                     System.err.println("JobID \""+job.getJobID()+"\" is used twice.\nTerminting...");
                     System.exit(1);
                 }
@@ -213,18 +214,14 @@ public class Testoku{
                 }
             }
             job.setTasks(jobTasksList);
-            jobsList.add(job);
+            jobList.add(job);
         }
         System.out.println("[OK] Unique JobIDs");
         System.out.println("[OK] All TaskTypes have size declared");
         System.out.println("[OK] All TaskType are valid");
 
-        for(Job j: jobsList){
-            System.out.println("jobID: " + j.getJobID());
-            for(int i = 0; i<j.getTasks().size(); i++){
-                System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getTaskName(), j.getTasks().get(i).getTaskSize());
-            }
-            System.out.println();
-        }
+       
+        return jobList;
     }
-}
+    
+    }
