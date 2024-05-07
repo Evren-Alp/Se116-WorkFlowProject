@@ -2,9 +2,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 
 
@@ -71,6 +71,7 @@ public class Test {
         
         boolean dur=false;
         boolean uyum=false;
+        boolean kir=false;
         while (dur==false) {
             for (Job job : jobList) {
                 if (job.getTasks().isEmpty()) {
@@ -82,18 +83,25 @@ public class Test {
                 break;
             }
             for (int i = 0; i < jobList.size(); i++) {
+                
                 for (int j = 0; j < jobList.get(i).getTasks().size(); j++) {
+                    
                     for (int k = 0; k < stationList.size(); k++) {
+                        
                         if (stationList.get(k).getSupportedTaskTypes().contains(jobList.get(i).getTasks().get(j).getTaskType())) {
                             if (stationList.get(k).getCapacity() > 0&&stationList.get(k).getCurrentTask()==Idle) {
                                 stationList.get(k).work(jobList.get(i).getTasks().get(j));
                                 stationList.get(k).setCurrentTask(jobList.get(i).getTasks().get(j));
                                 stationList.get(k).setCapacity(stationList.get(k).getCapacity() - 1);
                                 jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
-                                j=0;
-                                k=0;
-                                i=0;
-                                if (jobList.get(i).getJobDuration() <= 0) {
+                                if (jobList.get(i).getTasks().get(j).getTaskSize() >15) {
+                                   jobList.get(i).getTasks().get(j).setTaskSize(jobList.get(i).getTasks().get(j).getTaskSize()-15);
+                                   jobList.get(i).setJobDuration(jobList.get(i).getJobDuration()-15);
+                                    
+                                }
+                                
+                                if (jobList.get(i).getTasks().get(j).getTaskSize() <= 15) {
+                                    jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
                                     jobList.get(i).getTasks().remove(j);
                                     stationList.get(k).setCurrentTask(Idle);
                                     stationList.get(k).setCapacity(stationList.get(k).getCapacity()+1);
@@ -101,6 +109,10 @@ public class Test {
 
                                     
                                 }
+                                
+                                j=0;
+                                k=0;
+                                i=0;
                             }
                             
                         }
@@ -108,16 +120,30 @@ public class Test {
                             uyum=false;
                             break;
                         }
-                        if (uyum==false&&stationList.isEmpty()==false&&jobList.isEmpty()==false) {
-                            System.out.println("no station available for task ");
+                        
+                        
+                        if (stationList.isEmpty()) {
+                            kir=true;
+                            break;
+                            
                         }
                     }
                     
+                    if (jobList.get(i).getTasks().isEmpty()) {
+                        kir=true;
+                        break;
+                        
+                    }
                 }
                 
+                if (jobList.isEmpty()) {
+                    kir=true;
+                    break;
+                    
+                }
             }
             tur++;
-            yaz();
+            
         }    
     }
     //write method??
@@ -151,21 +177,14 @@ public class Test {
        Job job2 = new Job("job2",new ArrayList<Task>(taskler2));
 
    
-       for(Job j: jobList){
-        System.out.println("jobID: " + j.getJobID());
-        for(int i = 0; i<j.getTasks().size(); i++){
-            System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getTaskName(), j.getTasks().get(i).getTaskSize());
-        }
-        System.out.println();
        
-    }
         
     try {
         jobList=Testoku.oku();
     } catch (FileNotFoundException e) {
         System.err.println("annen nerede?");
     }
-    
+
         jobList.add(job1);
         jobList.add(job2);
 
@@ -185,14 +204,9 @@ public class Test {
         stationList.add(station1);
         stationList.add(station2);
     
-        for(Job j: jobList){
-            System.out.println("jobID: " + j.getJobID());
-            for(int i = 0; i<j.getTasks().size(); i++){
-                System.out.printf("TaskID: %s | Task Size: %f%n",j.getTasks().get(i).getTaskName(), j.getTasks().get(i).getTaskSize());
-            }
-            System.out.println();
-        }
+       
 
+        basla();
        
        
        
