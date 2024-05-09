@@ -58,6 +58,7 @@ public class Test {
         boolean uyum=false;
         tur = 1;
         boolean bothIdle=false;
+        yaz();
        while (activeTasks.isEmpty()==false||bothIdle==false) {
         uyum=false;
         
@@ -133,8 +134,8 @@ public class Test {
         
         taskler1.add(task1);
         taskler1.add(task2);
-        taskler1.add(task3);
-        taskler1.add(task4);
+        taskler2.add(task3);
+        taskler2.add(task4);
 
        Job job1 = new Job("job1", new ArrayList<Task>(taskler1) );
      
