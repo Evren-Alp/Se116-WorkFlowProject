@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 class Job{
     private String jobName;
-    private float jobDuration=10;
+    private float jobDuration=20;
     private String jobID = "";
     private ArrayList<Task> tasks;
     public String getJobName() {
@@ -12,14 +12,27 @@ class Job{
         this.jobName = jobName;
     }
     public float getJobDuration() {
+        this.jobDuration = 0;
+        for (Task task : tasks) {
+            this.jobDuration+=task.getTaskSize();
+        }
         return jobDuration;
     }
     public void setJobDuration(float jobDuration) {
         this.jobDuration = jobDuration;
     }
     public Job(String jobID, ArrayList<Task> tasks){
+        for (Task task : tasks) {
+            this.jobDuration+=task.getTaskSize();
+        }
         this.jobID = jobID;
         this.tasks = tasks;
+    }
+    public void resetJobDuration(){
+        this.jobDuration = 0;
+        for (Task task : tasks) {
+            this.jobDuration+=task.getTaskSize();
+        }
     }
     public Job(String jobID){
         this.jobID = jobID;

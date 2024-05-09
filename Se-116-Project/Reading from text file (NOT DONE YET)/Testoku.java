@@ -10,7 +10,7 @@ public class Testoku{
     private String txt = "";
     private Task[] tasksList;
     private ArrayList<Job> jobList = new ArrayList<>();
-    private ArrayList<Station2> stationsList = new ArrayList<>();
+    private ArrayList<Station> stationsList = new ArrayList<>();
     public Testoku(String pathname){
         try {
             File file = new File(pathname);
@@ -148,7 +148,7 @@ public class Testoku{
             Job job = new Job();
             if(match1.find()){
                 job.setJobID(match1.group(1));
-                jobTasks = match1.group(2);
+                jobTasks = match1.group(2); 
             }
 
             // Checking for duplicate JobIDs ----------------------------------------------------------------------------------
@@ -318,11 +318,11 @@ public class Testoku{
                 }
 
                 if(maxCapDefined){
-                    Station2 station = new Station2(name, maxCap, multi, fifo);
+                    Station station = new Station(name, maxCap, multi, fifo);
                     station.setTasksList(stationTasksList);
                     stationsList.add(station);
                 } else if(!maxCapDefined){
-                    Station2 station = new Station2(name, multi, fifo);
+                    Station station = new Station(name, multi, fifo);
                     station.setTasksList(stationTasksList);
                     stationsList.add(station);
                 }
@@ -338,7 +338,7 @@ public class Testoku{
         }
     }
     public void printStationsInfo(){
-        for(Station2 s : this.stationsList){
+        for(Station s : this.stationsList){
             System.out.println("Station ID: " + s.getName());
             for(Task t : s.getTasks()){
                 System.out.println("---TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
@@ -356,7 +356,7 @@ public class Testoku{
     public ArrayList<Job> getJobList(){
         return this.jobList;
     }
-    public ArrayList<Station2> getStations(){
+    public ArrayList<Station> getStations(){
         return this.stationsList;
     }
 }

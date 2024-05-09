@@ -1,0 +1,88 @@
+while (dur==false) {
+            yaz();
+            bitmis=0;
+            kir=false;
+            for (Job job : jobList) {
+                if (job.getTasks().isEmpty()) {
+                    bitmis++;
+                }
+            } 
+            if (bitmis>=jobList.size())break;
+            if (dur==true) {
+                System.out.println("\nAll jobs are done");
+                break;
+            }
+            for (int i = 0; i < jobList.size(); i++) {
+                
+                for (int j = 0; j < jobList.get(i).getTasks().size(); j++) {
+                    
+                    for (int k = 0; k < stationList.size(); k++) {
+                        
+                        if (stationList.get(k).getSupportedTaskTypes().contains(jobList.get(i).getTasks().get(j).getTaskType())) {
+                            if (stationList.get(k).getCapacity() > 0&&stationList.get(k).getCurrentTask()==Idle) {
+                                stationList.get(k).setCurrentTask(jobList.get(i).getTasks().get(j));
+                                stationList.get(k).setCapacity(stationList.get(k).getCapacity() - 1);
+                                jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
+                                if (jobList.get(i).getTasks().get(j).getTaskSize() >15) {
+                                   jobList.get(i).getTasks().get(j).setTaskSize(jobList.get(i).getTasks().get(j).getTaskSize()-15);
+                                   jobList.get(i).setJobDuration(jobList.get(i).getJobDuration()-15);
+                                    
+                                }
+                                
+                                if (jobList.get(i).getTasks().get(j).getTaskSize() <= 15) {
+                                    jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
+                                    jobList.get(i).getTasks().remove(j);
+                                    stationList.get(k).setCurrentTask(Idle);
+                                    stationList.get(k).setCapacity(stationList.get(k).getCapacity()+1);
+                                    
+
+                                    
+                                }
+                                
+                                j=0;
+                                k=0;
+                                i=0;
+                            }
+                            
+                        }
+                        if (uyum==true){
+                            uyum=false;
+                            break;
+                        }
+                        
+                        
+                        if (stationList.isEmpty()) {
+                            kir=true;
+                            break;
+                            
+                        }
+                        if (kir==true) {
+                            break;
+                            
+                        }
+                    }
+                    
+                    if (jobList.get(i).getTasks().isEmpty()) {
+                        kir=true;
+                        break;
+                        
+                    }
+                    if (kir==true) {
+                        break;
+                        
+                    }
+                }
+                
+                if (jobList.isEmpty()) {
+                    kir=true;
+                    break;
+                    
+                }
+                if (kir==true) {
+                    break;
+                    
+                }
+            }
+            tur++;
+            if (tur>2)break;
+        } 

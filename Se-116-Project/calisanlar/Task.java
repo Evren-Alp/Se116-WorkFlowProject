@@ -1,4 +1,5 @@
-class Task extends Job{
+import java.util.Random;
+class Task{
     private String name;
     private float size;
     private TaskType taskType;{
@@ -21,6 +22,7 @@ class Task extends Job{
     }public Task(String name, float size){
         this.name = name;
         this.size = size;
+        
         this.taskType = taskType;
     }
     public Task(String name){

@@ -9,10 +9,11 @@ import java.util.ArrayList;
 
 
 public class Test {
+    public static ArrayList<Task> activeTasks=new ArrayList<>();
     public static Task Idle=new Task("IDLE", 0,TaskType.T0);
     public static int tur=1;
     public static ArrayList<Station> stationList= new ArrayList<>();
-    public static ArrayList<Job> jobList= Testoku.jobList;
+    public static ArrayList<Job> jobList;
     public static void describeJob(Job job) {
         System.out.println("Job ID: " + job.getJobID());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
@@ -54,97 +55,54 @@ public class Test {
                 if (station.getCurrentTask()==null) {
                     status="Idle";
                  }
-                else if (station.getCapacity()==station.getStartingCapacity()) {
+                else if (station.getCapacity()==station.getMaxCapacity()) {
                     status="Idle"+"/finished"+station.getCurrentTask().getTaskType();
                 }
                 
                 else if (station.getCurrentTask()!=null) status=("Working on " + station.getCurrentTask().getTaskType()+"/"+station.getCurrentTask().getTaskSize()+" minutes remaining");
                     
                 
-                System.out.print("  "+station.getStationName()+"/"+status+"   ");
+                System.out.print("  "+station.getName()+"/"+status+"   ");
             }
     }
     public static void basla() {
-        int turcapacity = 0;
-        yaz();
+        boolean uyum=false;
+       while (activeTasks.isEmpty()==false) {
+        uyum=false;
+       
         tur = 1;
         
-        boolean dur=false;
-        boolean uyum=false;
-        boolean kir=false;
-        while (dur==false) {
-            for (Job job : jobList) {
-                if (job.getTasks().isEmpty()) {
-                    dur=true;
+        for (Station station : stationList) {
+
+            for (Task task : activeTasks) {
+                if (station.getSupportedTaskTypes().contains(task.getTaskType()) && station.getCurrentTask().getTaskType()==TaskType.T0) {
+                    station.work(task);
+                    station.setCurrentTask(task);
+                    activeTasks.remove(task);
+                    uyum=true;
+                    break;
+                }
+                else {
+                    uyum=true;
+                    break;
                 }
             } 
-            if (dur==true) {
-                System.out.println("\nAll jobs are done");
+            if (uyum==true) {
                 break;
             }
-            for (int i = 0; i < jobList.size(); i++) {
-                
-                for (int j = 0; j < jobList.get(i).getTasks().size(); j++) {
-                    
-                    for (int k = 0; k < stationList.size(); k++) {
-                        
-                        if (stationList.get(k).getSupportedTaskTypes().contains(jobList.get(i).getTasks().get(j).getTaskType())) {
-                            if (stationList.get(k).getCapacity() > 0&&stationList.get(k).getCurrentTask()==Idle) {
-                                stationList.get(k).work(jobList.get(i).getTasks().get(j));
-                                stationList.get(k).setCurrentTask(jobList.get(i).getTasks().get(j));
-                                stationList.get(k).setCapacity(stationList.get(k).getCapacity() - 1);
-                                jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
-                                if (jobList.get(i).getTasks().get(j).getTaskSize() >15) {
-                                   jobList.get(i).getTasks().get(j).setTaskSize(jobList.get(i).getTasks().get(j).getTaskSize()-15);
-                                   jobList.get(i).setJobDuration(jobList.get(i).getJobDuration()-15);
-                                    
-                                }
-                                
-                                if (jobList.get(i).getTasks().get(j).getTaskSize() <= 15) {
-                                    jobList.get(i).setJobDuration(jobList.get(i).getJobDuration() - jobList.get(i).getTasks().get(j).getTaskSize());
-                                    jobList.get(i).getTasks().remove(j);
-                                    stationList.get(k).setCurrentTask(Idle);
-                                    stationList.get(k).setCapacity(stationList.get(k).getCapacity()+1);
-                                    
-
-                                    
-                                }
-                                
-                                j=0;
-                                k=0;
-                                i=0;
-                            }
-                            
-                        }
-                        if (uyum==true){
-                            uyum=false;
-                            break;
-                        }
-                        
-                        
-                        if (stationList.isEmpty()) {
-                            kir=true;
-                            break;
-                            
-                        }
-                    }
-                    
-                    if (jobList.get(i).getTasks().isEmpty()) {
-                        kir=true;
-                        break;
-                        
-                    }
-                }
-                
-                if (jobList.isEmpty()) {
-                    kir=true;
-                    break;
-                    
-                }
+           
+         }
+         //her tur
+         tur++;
+         for (Station station : stationList) {
+            station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
+            if (station.getCurrentTask().getTaskSize()==0) {
+                System.out.println(station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                station.setCurrentTask(Idle);
             }
-            tur++;
-            
-        }    
+         }
+         
+        }     
     }
     //write method??
     public static void writeToFile(String content) {
@@ -161,6 +119,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
+        
         ArrayList<Task> taskler1=new ArrayList<>();
         ArrayList<Task> taskler2=new ArrayList<>(); 
         Task task1 = new Task("task1", 15, TaskType.T1);
@@ -170,22 +129,21 @@ public class Test {
         
         taskler1.add(task1);
         taskler1.add(task2);
-        taskler2.add(task3);
-        taskler2.add(task4);
+        taskler1.add(task3);
+        taskler1.add(task4);
 
        Job job1 = new Job("job1", new ArrayList<Task>(taskler1) );
-       Job job2 = new Job("job2",new ArrayList<Task>(taskler2));
+     
 
    
        
         
-    try {
-        Testoku t = new Testoku("D:\\Documents\\GitHub\\Se-116-Project\\Se-116-Project\\Reading from text file (NOT DONE YET)\\Workflow.txt")
-        jobList=t.getJobList();
-    } catch (FileNotFoundException e) {
-        System.err.println("annen nerede?");
-    }
-
+    
+        Testoku t = new Testoku("D:\\Documents\\GitHub\\Se-116-Project\\Se-116-Project\\Reading from text file (NOT DONE YET)\\Workflow.txt");
+       /*  jobList=t.getJobList();*/
+       jobList = new ArrayList<>();
+    
+        Job job2 = new Job("job2",new ArrayList<Task>(taskler2));
         jobList.add(job1);
         jobList.add(job2);
 
@@ -199,14 +157,17 @@ public class Test {
         stationAblility2.add(TaskType.T3);
         stationAblility2.add(TaskType.T4);
 
-        Station station1 = new Station("station1", stationAblility1, 1,1);
-        Station station2 = new Station("station2", stationAblility2, 1, 1);
+        
+        Station station1 = new Station("abuzo",  3,   true, false);
+        Station station2 = new Station("abu",  2,   true, false);
        
         stationList.add(station1);
         stationList.add(station2);
     
        
-
+        for (Job job : jobList) {
+            activeTasks.addAll(job.getTasks());
+        }
         basla();
        
        

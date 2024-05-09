@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class Station{
+public class Station3{
     private String stationName;
     private ArrayList<TaskType> supportedTaskTypes;
     private int startingCapacity;
@@ -9,7 +9,7 @@ public class Station{
     private double speed;
     private Task currentTask=Test.Idle;
  
-    public Station(String stationName, ArrayList<TaskType> supportedTaskTypes, int capacity, double speed) {
+    public Station3(String stationName, ArrayList<TaskType> supportedTaskTypes, int capacity, double speed) {
         this.stationName = stationName;
         this.supportedTaskTypes = supportedTaskTypes;
         this.capacity = capacity;
