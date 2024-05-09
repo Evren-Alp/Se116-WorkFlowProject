@@ -44,33 +44,24 @@ public class Test {
        
     }
     public static void yaz(){
-        System.out.println("\nMinute: "+(tur-1)*15);
+        
             System.out.println("jobs: ");
             for (Job job : jobList) {
                 System.out.println(job.getJobID()+"/Remaining: "+job.getJobDuration());
             }
-            System.out.print("\nStations: ");
-            for (Station station : stationList) {
-                String status="";
-                if (station.getCurrentTask()==null) {
-                    status="Idle";
-                 }
-                else if (station.getCapacity()==station.getMaxCapacity()) {
-                    status="Idle"+"/finished"+station.getCurrentTask().getTaskType();
-                }
+      
                 
-                else if (station.getCurrentTask()!=null) status=("Working on " + station.getCurrentTask().getTaskType()+"/"+station.getCurrentTask().getTaskSize()+" minutes remaining");
-                    
                 
-                System.out.print("  "+station.getName()+"/"+status+"   ");
-            }
+            
     }
     public static void basla() {
         boolean uyum=false;
-       while (activeTasks.isEmpty()==false) {
-        uyum=false;
-       
         tur = 1;
+        boolean bothIdle=false;
+       while (activeTasks.isEmpty()==false||bothIdle==false) {
+        uyum=false;
+        
+        
         
         for (Station station : stationList) {
 
@@ -93,16 +84,29 @@ public class Test {
            
          }
          //her tur
-         tur++;
+         
          for (Station station : stationList) {
             station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
             if (station.getCurrentTask().getTaskSize()==0) {
-                System.out.println(station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                System.out.print("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                yaz();
                 station.setCurrentTask(Idle);
+                break;
             }
          }
-         
-        }     
+         for(Station station:stationList){
+            if (station.getCurrentTask().getTaskType()==TaskType.T0) {
+                bothIdle=true;
+            }
+            else{
+                bothIdle=false;
+                break;
+            }
+            
+         }
+         tur++;
+        } 
+        System.out.println("All jobs are done");    
     }
     //write method??
     public static void writeToFile(String content) {
@@ -158,8 +162,8 @@ public class Test {
         stationAblility2.add(TaskType.T4);
 
         
-        Station station1 = new Station("abuzo",  3,   true, false);
-        Station station2 = new Station("abu",  2,   true, false);
+        Station station1 = new Station("Station1",  3,   true, false);
+        Station station2 = new Station("Station2",  2,   true, false);
        
         stationList.add(station1);
         stationList.add(station2);

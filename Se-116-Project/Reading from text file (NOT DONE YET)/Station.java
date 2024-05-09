@@ -36,8 +36,8 @@ public class Station {
     public void work(Task task) {
         if (supportedTaskTypes.contains(task.getTaskType())) {
             
-            System.out.println( name +" doing job: " + task.getTaskType());           
-            System.out.println("duration: " + calculateTaskDuration(task));
+            System.out.println("Minute "+Test.tur+": "+ name +" doing job: " + task.getTaskType()+" "+"duration: " + calculateTaskDuration(task)+"\n");           
+          
            
         } else {
             System.out.println("Unsupported task type for this station");
