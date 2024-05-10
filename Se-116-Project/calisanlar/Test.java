@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 
 public class Test {
+    public static String workflowFile="";
     public static ArrayList<Task> activeTasks=new ArrayList<>();
     public static Task Idle=new Task("IDLE", 0,TaskType.T0);
     public static int tur=1;
@@ -69,6 +70,7 @@ public class Test {
             for (Task task : activeTasks) {
                 if (station.getSupportedTaskTypes().contains(task.getTaskType()) && station.getCurrentTask().getTaskType()==TaskType.T0) {
                     station.work(task);
+                    workflowFile+="\n"+ task.getTaskType()+" "+tur+" ";
                     station.setCurrentTask(task);
                     activeTasks.remove(task);
                     uyum=true;
@@ -89,6 +91,7 @@ public class Test {
          for (Station station : stationList) {
             station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
             if (station.getCurrentTask().getTaskSize()==0) {
+                workflowFile+=tur;
                 System.out.print("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                 yaz();
                 station.setCurrentTask(Idle);
@@ -106,13 +109,16 @@ public class Test {
             
          }
          tur++;
+         
         } 
         System.out.println("All jobs are done");    
+        
+        
     }
     //write method??
     public static void writeToFile(String content) {
         try {
-            File file = new File("output.txt");
+            File file = new File("Se-116-Project\\calisanlar\\output.txt");
             FileWriter writer = new FileWriter(file);
             writer.write(content + "\n");
             writer.close();
@@ -124,6 +130,8 @@ public class Test {
     }
 
     public static void main(String[] args) {
+        File file = new File("Se-116-Project\\calisanlar\\Workflow.txt");
+        System.out.println(file.getAbsolutePath());
         
         ArrayList<Task> taskler1=new ArrayList<>();
         ArrayList<Task> taskler2=new ArrayList<>(); 
@@ -144,7 +152,7 @@ public class Test {
        
         
     
-        Testoku t = new Testoku("D:\\Documents\\GitHub\\Se-116-Project\\Se-116-Project\\Reading from text file (NOT DONE YET)\\Workflow.txt");
+        Testoku t = new Testoku("Se-116-Project\\calisanlar\\Workflow.txt");
        /*  jobList=t.getJobList();*/
        jobList = new ArrayList<>();
     
@@ -174,6 +182,8 @@ public class Test {
             activeTasks.addAll(job.getTasks());
         }
         basla();
+        System.out.println(workflowFile);
+        writeToFile(workflowFile);
        
        
        
