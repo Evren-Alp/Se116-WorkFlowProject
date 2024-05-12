@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.nio.*;
 
 public class Testoku{
     private boolean debugging = true;
@@ -111,11 +110,24 @@ public class Testoku{
         if(debugging) System.out.println("[OK] No tasktype duplicates.");
 
         // SELECTING THE JOBTYPES SECTION -------------------------------------------------------------------------------------
-        //Pattern for separating the whole JOBTYPES section from the text file
-        Pattern jobsPattern = Pattern.compile("[(]JOBTYPES(?:\\s+[(][a-zA-Z0-9 ]+\\.\\d+[)]|\\s+[(][a-zA-Z0-9 ]+[)])+[)]");
+        Pattern jobsPattern = Pattern.compile("([(]JOBTYPES(?:\\s+[(][A-z0-9 ]+\\.\\d+[)]|\\s+[(][A-z0-9\\s]+[)])+[)]+)");
         Matcher match1 = jobsPattern.matcher(txt);
         String jobTypes = "";
-        while(match1.find()) jobTypes += match1.group();
+        while(match1.find()){
+            jobTypes += match1.group(1);
+        }
+        if(jobTypes.equals("")){
+            System.err.println("Wrong syntax for the JOBTYPES section.\nTerminating...");
+            System.exit(1);
+        }
+        if(!jobTypes.endsWith("))")){
+            System.err.println("The JOBTYPES section is not closed. \")\" missing.\nTerminating...");
+            System.exit(1);
+        }
+        if(jobTypes.endsWith(")))")){
+            System.err.println("SyntaxError at the end of the STATIONS section. Extra \")\"s used.\nTerminating...");
+            System.exit(1);
+        }
 
         jobsPattern = Pattern.compile("[(][a-zA-Z0-9 ]+\\.\\d+[)]|[(][a-zA-Z0-9 ]+[)]");
         match1 = jobsPattern.matcher(jobTypes);
@@ -232,7 +244,7 @@ public class Testoku{
             System.exit(1);
         }
         if(!syntaxCheck.endsWith("))")){
-            System.err.println("STATIONS section is not closed. \")\" missing.\nTerminating...");
+            System.err.println("The STATIONS section is not closed. \")\" missing.\nTerminating...");
             System.exit(1);
         }
         if(syntaxCheck.endsWith(")))")){
@@ -301,7 +313,7 @@ public class Testoku{
                         boolean isValid = false;
                         for(int i = 0; i<tasksList.length; i++){
                             if(tasksList[i].getTaskName().equals(stationTask.getTaskName())){
-                                if(tasksList[i].getTaskSize() == 0.0f){ // Checking if the task size is declared ----------------------
+                                if(tasksList[i].getTaskSize() == 0.0f){ // Checking if the task size is declared --------------
                                     System.err.println("Task size for \""+ stationTask.getTaskName() +"\" not declared.\nTerminating...");
                                     System.exit(1);
                                 }
@@ -312,7 +324,7 @@ public class Testoku{
                                 isValid = true;
                             }
                         }
-                        if(!isValid){ // Checking if the tasktype is declared in TASKTYPES section ------------------------------
+                        if(!isValid){ // Checking if the tasktype is declared in TASKTYPES section ----------------------------
                             System.err.println("Tasktype \""+ stationTask.getTaskName() +"\" not declared in TASKTYPES.");
                         }
                     }
@@ -329,12 +341,32 @@ public class Testoku{
                 }
             }
         }
+        // This part looks for tasks that are not identified in the stations part ---------------------------------------------
+        boolean taskIsIdentified = false;
+        for(int i = 0; i<tasksList.length; i++){ // i is for getting each task in the tasksList
+            taskIsIdentified = false;
+            for(int j = 0; j<stationsList.size(); j++){ // j is for getting each station in the stationsList
+                for(int k = 0; k<stationsList.get(j).getTasks().size(); k++){ // k is for getting each task in the stationsList's tasksList
+                    if(stationsList.get(j).getTasks().get(k).getTaskName().equals(tasksList[i].getTaskName())){
+                        taskIsIdentified = true;
+                        break;
+                    }
+                }
+                if(taskIsIdentified){
+                    break;
+                }
+            }
+            if(!taskIsIdentified){
+                System.err.println("The task \"" + tasksList[i].getTaskName() + "\" is identified in the TASKTYPES section but none of the stations include it.\nTerminating...");
+                System.exit(1);
+            }
+        }
     }
     public void printJobsInfo(){ // getJobID|getTasks
         for(Job j : jobList){
             System.out.println("Job ID: " + j.getJobID());
             for(Task t: j.getTasks()){
-                System.out.println("---TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
+                System.out.println("--- TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
             }
         }
     }
@@ -342,13 +374,13 @@ public class Testoku{
         for(Station s : this.stationsList){
             System.out.println("Station ID: " + s.getName());
             for(Task t : s.getTasks()){
-                System.out.println("---TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
+                System.out.println("--- TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
             }
         }
     }
     public void printTasksInfo(){
         for(Task t: tasksList){
-            System.out.println("TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
+            System.out.println("-- TaskID: " + t.getTaskName() + " | " + "Size: " + t.getTaskSize());
         }
     }
     public Task[] getTasksList(){
