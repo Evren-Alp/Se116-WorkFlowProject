@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class Test {
     public static String workflowFile="";
+    public static ArrayList<Task> allTasks=new ArrayList<>();
     public static ArrayList<Task> activeTasks=new ArrayList<>();
     public static Task Idle=new Task("IDLE", 0,TaskType.T0);
     public static int tur=1;
@@ -66,22 +67,34 @@ public class Test {
         
         
         for (Station station : stationList) {
+            
 
             for (Task task : activeTasks) {
                 if (station.getSupportedTaskTypes().contains(task.getTaskType()) && station.getCurrentTask().getTaskType()==TaskType.T0) {
                     station.work(task);
-                    workflowFile+="\n"+ task.getTaskType()+" "+tur+" ";
+                    task.setStartingTime(tur);
+                    
+                    
                     station.setCurrentTask(task);
                     activeTasks.remove(task);
                     uyum=true;
+                    for (Job job : jobList) {
+                        if (job.getTasks().contains(station.getCurrentTask())){
+                            station.getCurrentTask().setFile("\n"+job.getJobID()+" ");;
+                            break;
+                        }
+                    }
+                    station.getCurrentTask().setFile(task.getTaskType()+" "+tur+" ");
                     break;
                 }
                 else {
-                    uyum=true;
+                    
+                    uyum=false;
                     break;
                 }
             } 
-            if (uyum==true) {
+            
+            if (bothIdle==false) {
                 break;
             }
            
@@ -91,10 +104,12 @@ public class Test {
          for (Station station : stationList) {
             station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
             if (station.getCurrentTask().getTaskSize()==0) {
-                workflowFile+=tur;
-                System.out.print("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
-                yaz();
+               
+                station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
+                System.out.println("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                
                 station.setCurrentTask(Idle);
+                System.out.println(workflowFile);
                 break;
             }
          }
@@ -109,9 +124,19 @@ public class Test {
             
          }
          tur++;
+        
          
+         if (activeTasks.isEmpty()&&bothIdle==true) {
+            break;
+            
+         }
         } 
-        System.out.println("All jobs are done");    
+        System.out.println("All jobs are done");  
+        for(Task task:allTasks){
+            System.out.println(task.getFile());
+            workflowFile+=task.getFile();
+        } 
+        System.out.println(workflowFile); 
         
         
     }
@@ -145,7 +170,7 @@ public class Test {
         taskler2.add(task3);
         taskler2.add(task4);
 
-       Job job1 = new Job("job1", new ArrayList<Task>(taskler1) );
+       Job job1 = new Job("Job1", new ArrayList<Task>(taskler1) );
      
 
    
@@ -155,8 +180,9 @@ public class Test {
         Testoku t = new Testoku("Se-116-Project\\calisanlar\\Workflow.txt");
        /*  jobList=t.getJobList();*/
        jobList = new ArrayList<>();
+       
     
-        Job job2 = new Job("job2",new ArrayList<Task>(taskler2));
+        Job job2 = new Job("Job2",new ArrayList<Task>(taskler2));
         jobList.add(job1);
         jobList.add(job2);
 
@@ -176,11 +202,13 @@ public class Test {
        
         stationList.add(station1);
         stationList.add(station2);
+        
     
        
         for (Job job : jobList) {
             activeTasks.addAll(job.getTasks());
         }
+        allTasks.addAll(activeTasks);
         basla();
         System.out.println(workflowFile);
         writeToFile(workflowFile);

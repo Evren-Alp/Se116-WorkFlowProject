@@ -2,9 +2,11 @@ import java.util.Random;
 class Task{
     private String name;
     private float size;
-    private TaskType taskType;{
+    private TaskType taskType;
+    private int startingTime; 
+    private String file="";   
         
-    }
+    
     public Task(Task task){
         this.name = task.name;
         this.size = task.size;
@@ -42,5 +44,17 @@ class Task{
     }
     public void setTaskSize(float size){
         this.size = size;
+    }
+    public int getStartingTime() {
+        return startingTime;
+    }
+    public void setStartingTime(int startingTime) {
+        this.startingTime = startingTime;
+    }
+    public String getFile() {
+        return file;
+    }
+    public void setFile(String file) {
+        this.file += file;
     }
 }
