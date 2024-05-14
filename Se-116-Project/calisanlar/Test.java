@@ -77,6 +77,7 @@ public class Test {
                     
                     station.setCurrentTask(task);
                     activeTasks.remove(task);
+                    station.getCurrentTask().setTaskSize(station.calculateTaskDuration(task));
                     uyum=true;
                     for (Job job : jobList) {
                         if (job.getTasks().contains(station.getCurrentTask())){
@@ -109,7 +110,7 @@ public class Test {
                 System.out.println("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                 
                 station.setCurrentTask(Idle);
-                System.out.println(workflowFile);
+                
                 break;
             }
          }
@@ -133,10 +134,10 @@ public class Test {
         } 
         System.out.println("All jobs are done");  
         for(Task task:allTasks){
-            System.out.println(task.getFile());
+       
             workflowFile+=task.getFile();
         } 
-        System.out.println(workflowFile); 
+        
         
         
     }

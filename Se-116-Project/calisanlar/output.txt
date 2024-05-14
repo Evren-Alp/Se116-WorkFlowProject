@@ -1,5 +1,5 @@
 
-Job1 T1 1 15
-Job1 T2 16 30
-Job2 T3 16 46
-Job2 T4 46 60
+Job1 T1 1 16
+Job1 T2 17 26
+Job2 T3 17 47
+Job2 T4 43 64

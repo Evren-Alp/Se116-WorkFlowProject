@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Station {
     private String name;
@@ -8,7 +9,9 @@ public class Station {
     private boolean multiflag;
     private boolean fifoflag;
     private double speed=1;
+    private float plusminus=0.2f;
     private Task currentTask=Test.Idle;
+    Random r= new Random();
     private ArrayList<TaskType> supportedTaskTypes=new ArrayList<>();
     ArrayList<Task> tasks;
     public Station(String name, int maxCapacity, boolean multiflag, boolean fifoflag){//remove tasktype
@@ -36,7 +39,7 @@ public class Station {
     public void work(Task task) {
         if (supportedTaskTypes.contains(task.getTaskType())) {
             
-            System.out.println("Minute "+Test.tur+": "+ name +" doing job: " + task.getTaskType()+" "+"duration: " + calculateTaskDuration(task)+"\n");           
+            System.out.println("Minute "+Test.tur+": "+ name +" doing job: " + task.getTaskType()+" "+"duration: " + calculateTaskDuration(task)+"");           
           
            
         } else {
@@ -74,7 +77,18 @@ public class Station {
         return this.tasks;
     }
     public int calculateTaskDuration(Task task) {
-        return (int) (task.getTaskSize() / speed);
+        float ran=r.nextFloat(-plusminus, plusminus);
+        
+        if (plusminus>0){
+           
+                return (int) (task.getTaskSize() / (speed+ran));
+            
+    }
+        if (plusminus==0.0){
+            return (int) (task.getTaskSize() / speed);
+        }
+       return 0;
+        
     }
     public int getMaxCapacity() {
         return maxCapacity;
