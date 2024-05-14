@@ -1,4 +1,3 @@
-import java.util.Random;
 class Task{
     private String name;
     private float size;
@@ -24,8 +23,6 @@ class Task{
     }public Task(String name, float size){
         this.name = name;
         this.size = size;
-        
-        this.taskType = taskType;
     }
     public Task(String name){
         this.name = name;

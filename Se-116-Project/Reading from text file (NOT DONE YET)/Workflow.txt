@@ -6,6 +6,6 @@
     (J4 T21 5 T1 2))
 
 (STATIONS
-(S1 N N T1 2 T2)
+(S1 N N T1 2 T2 5 0.2)
 (S2 2 N Y T1 2 T2 4)
 (S3 2 N Y T3 1 T4 T5 T_1 T21))

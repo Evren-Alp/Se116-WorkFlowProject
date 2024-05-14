@@ -293,12 +293,13 @@ public class Testoku{
                     System.exit(1);
                 }
                 // Pattern for serparating tasks.
-                Pattern pattern2 = Pattern.compile("([A-z]+\\d+\\s+\\d+\\.\\d+|[A-z]+\\d+\\s+\\d+|[A-z]+\\d+)");
+                Pattern pattern2 = Pattern.compile("([A-z]+\\d+\\s+\\d+\\.\\d+\\s\\d+\\.\\d+|[A-z]+\\d+\\s+\\d+\\s+\\d+\\.\\d+|[A-z]+\\d+\\s+\\d+\\.\\d+|[A-z]+\\d+\\s+\\d+|[A-z]+\\d+)");
                 Matcher matcher2 = pattern2.matcher(matcher1.group(5));
                 ArrayList<String> tasks2 = new ArrayList<>();
                 while(matcher2.find()){
                     tasks2.add(matcher2.group(1));
                 }
+                ArrayList<String> plusMinusList = new ArrayList<>();
                 //Separating TaskID and sizes, checking for error if size is not declared anywhere.
                 for(String ss: tasks2){
                     Task stationTask = new Task();
@@ -306,6 +307,12 @@ public class Testoku{
                     if(splitten.length == 2){
                         stationTask.setTaskName(splitten[0]);
                         stationTask.setTaskSize(Float.valueOf(splitten[1]));
+                        stationTasksList.add(stationTask);
+                    }
+                    else if(splitten.length == 3){
+                        stationTask.setTaskName(splitten[0]);
+                        stationTask.setTaskSize(Float.valueOf(splitten[1]));
+                        plusMinusList.add(splitten[0] + " " + splitten[2]);
                         stationTasksList.add(stationTask);
                     }
                     else{
@@ -329,16 +336,16 @@ public class Testoku{
                         }
                     }
                 }
-
+                Station station = new Station();
                 if(maxCapDefined){
-                    Station station = new Station(name, maxCap, multi, fifo);
+                    station = new Station(name, maxCap, multi, fifo);
                     station.setTasksList(stationTasksList);
-                    stationsList.add(station);
                 } else if(!maxCapDefined){
-                    Station station = new Station(name, multi, fifo);
+                    station = new Station(name, multi, fifo);
                     station.setTasksList(stationTasksList);
-                    stationsList.add(station);
                 }
+                station.setPlusminusList(plusMinusList);
+                stationsList.add(station);
             }
         }
         // This part looks for tasks that are not identified in the stations part ---------------------------------------------

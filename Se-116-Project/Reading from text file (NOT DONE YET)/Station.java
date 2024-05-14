@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Station {
     private String name;
@@ -8,12 +10,16 @@ public class Station {
 
     private boolean multiflag;
     private boolean fifoflag;
-    private double speed=1;
+    private float speed=1;
     private float plusminus=0.2f;
     private Task currentTask=Test.Idle;
     Random r= new Random();
     private ArrayList<TaskType> supportedTaskTypes=new ArrayList<>();
     ArrayList<Task> tasks;
+    ArrayList<String> plusMinusList;
+    public Station(){
+
+    }
     public Station(String name, int maxCapacity, boolean multiflag, boolean fifoflag){//remove tasktype
         this.supportedTaskTypes.add(TaskType.T0);
         this.supportedTaskTypes.add(TaskType.T1);
@@ -76,19 +82,27 @@ public class Station {
     public ArrayList<Task> getTasks(){
         return this.tasks;
     }
-    public int calculateTaskDuration(Task task) {
-        float ran=r.nextFloat(-plusminus, plusminus);
-        
-        if (plusminus>0){
-           
-                return (int) (task.getTaskSize() / (speed+ran));
-            
-    }
-        if (plusminus==0.0){
-            return (int) (task.getTaskSize() / speed);
+    public float calculateTaskDuration(Task task){
+        // Pattern for finding plusMinus for each tasktype
+        Pattern separatePlusMinus = Pattern.compile("([A-z]+\\d+)\\s+(\\d+\\.\\d+)");
+        try{
+            for(String item : plusMinusList){
+                Matcher matcher1 = separatePlusMinus.matcher(item);
+                if(matcher1.find()){
+                    if(matcher1.group(1).equals(task.getTaskName())){ //If task names are equal, set plusminus value according to the list.
+                        plusminus = Float.valueOf(matcher1.group(2));
+                        float ran = r.nextFloat(-plusminus, plusminus);
+                        if (plusminus>0){
+                            return task.getTaskSize()/(speed+ran);
+                        }
+                    }
+                }
+            }
         }
-       return 0;
-        
+        catch(NullPointerException e){
+            plusminus = 0.0f;            
+        }
+        return task.getTaskSize() / speed;
     }
     public int getMaxCapacity() {
         return maxCapacity;
@@ -96,10 +110,10 @@ public class Station {
     public void setMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
     }
-    public double getSpeed() {
+    public float getSpeed() {
         return speed;
     }
-    public void setSpeed(double speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
     public Task getCurrentTask() {
@@ -122,5 +136,11 @@ public class Station {
     }
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+    public void setPlusminusList(ArrayList<String> list){
+        this.plusMinusList = list;
+    }
+    public ArrayList<String> getPlusminusList(){
+        return this.plusMinusList;
     }
 }
