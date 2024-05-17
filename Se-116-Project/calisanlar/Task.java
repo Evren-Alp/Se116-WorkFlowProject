@@ -16,6 +16,79 @@ class Task{
     public void setTaskType(TaskType taskType) {
         this.taskType = taskType;
     }
+    public void setTaskType(String t) {
+        if(t.equals("T0")){
+            this.taskType = taskType.T0;
+        }
+        else if(t.equals("T1")){
+            this.taskType = taskType.T1;
+        }
+        else if(t.equals("T2")){
+            this.taskType = taskType.T2;
+        }
+        else if(t.equals("T3")){
+            this.taskType = taskType.T3;
+        }
+        else if(t.equals("T4")){
+            this.taskType = taskType.T4;
+        }
+        else if(t.equals("T5")){
+            this.taskType = taskType.T5;
+        }
+        else if(t.equals("T6")){
+            this.taskType = taskType.T6;
+        }
+        else if(t.equals("T7")){
+            this.taskType = taskType.T7;
+        }
+        else if(t.equals("T8")){
+            this.taskType = taskType.T8;
+        }
+        else if(t.equals("T9")){
+            this.taskType = taskType.T9;
+        }
+        else if(t.equals("T10")){
+            this.taskType = taskType.T10;
+        }
+        else if(t.equals("T11")){
+            this.taskType = taskType.T11;
+        }
+        else if(t.equals("T12")){
+            this.taskType = taskType.T12;
+        }
+        else if(t.equals("T13")){
+            this.taskType = taskType.T13;
+        }
+        else if(t.equals("T14")){
+            this.taskType = taskType.T14;
+        }
+        else if(t.equals("T15")){
+            this.taskType = taskType.T15;
+        }
+        else if(t.equals("T16")){
+            this.taskType = taskType.T16;
+        }
+        else if(t.equals("T17")){
+            this.taskType = taskType.T17;
+        }
+        else if(t.equals("T18")){
+            this.taskType = taskType.T18;
+        }
+        else if(t.equals("T19")){
+            this.taskType = taskType.T19;
+        }
+        else if(t.equals("T20")){
+            this.taskType = taskType.T20;
+        }
+        else if(t.equals("T21")){
+            this.taskType = taskType.T21;
+        }
+        else{
+            System.err.println("Wrong tasktype.\nTerminating...");
+            System.out.println(t);
+            System.exit(1);
+        }
+    }
     public Task(String name, float size, TaskType taskType){
         this.name = name;
         this.size = size;

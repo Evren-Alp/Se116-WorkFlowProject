@@ -189,17 +189,18 @@ public class Testoku{
             // for(String s: tasksSeparated){
             //     System.out.println("." + s + ".");
             // }
-
             for(String s: tasksSeparated){
                 Task jobTask = new Task();
                 String[] splitten = s.split(" "); 
                 if(splitten.length == 2){
                     jobTask.setTaskName(splitten[0]);
+                    jobTask.setTaskType(splitten[0]);
                     jobTask.setTaskSize(Float.valueOf(splitten[1]));
                     jobTasksList.add(jobTask);
                 }
                 else{
                     jobTask.setTaskName(splitten[0]);
+                    jobTask.setTaskType(splitten[0]);
                     boolean validTask = false;
                     for(int j = 0; j<tasksList.length; j++){
                         if(tasksList[j].getTaskName().equals(jobTask.getTaskName())){
@@ -306,17 +307,20 @@ public class Testoku{
                     String[] splitten = ss.split(" ");
                     if(splitten.length == 2){
                         stationTask.setTaskName(splitten[0]);
+                        stationTask.setTaskType(splitten[0]);
                         stationTask.setTaskSize(Float.valueOf(splitten[1]));
                         stationTasksList.add(stationTask);
                     }
                     else if(splitten.length == 3){
                         stationTask.setTaskName(splitten[0]);
+                        stationTask.setTaskType(splitten[0]);
                         stationTask.setTaskSize(Float.valueOf(splitten[1]));
                         plusMinusList.add(splitten[0] + " " + splitten[2]);
                         stationTasksList.add(stationTask);
                     }
                     else{
                         stationTask.setTaskName(splitten[0]);
+                        stationTask.setTaskType(splitten[0]);
                         boolean isValid = false;
                         for(int i = 0; i<tasksList.length; i++){
                             if(tasksList[i].getTaskName().equals(stationTask.getTaskName())){
