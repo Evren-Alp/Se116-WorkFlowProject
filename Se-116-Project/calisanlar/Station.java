@@ -7,7 +7,7 @@ public class Station {
     private String name;
     private int maxCapacity;
     private int capacity;
-
+    private float idleCount=0.0f;
     private boolean multiflag;
     private boolean fifoflag;
     private float speed=1;
@@ -133,4 +133,11 @@ public class Station {
     public ArrayList<String> getPlusminusList(){
         return this.plusMinusList;
     }
+    public float getIdleCount() {
+        return idleCount;
+    }
+    public void setIdleCount(float idleCount) {
+        this.idleCount = idleCount;
+    }
+    
 }

@@ -44,9 +44,8 @@ public class Test {
         boolean Working=false;
         yaz();
         while (activeTasks.isEmpty()==false||Working==true) {
-           if (tur%5==0) {
-            yaz(); 
-            }
+           
+            
             
             for (Station station : stationList) {
                 for (Task task : activeTasks) {
@@ -74,6 +73,12 @@ public class Test {
                 
             }
             //her tur
+            for (Station station : stationList) {
+                if (station.getCurrentTask().getTaskType()==TaskType.T0) {
+                    station.setIdleCount(station.getIdleCount()+1);
+                    
+                }
+            }
             for (Station station : stationList) {
                 station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
                 if ((station.getCurrentTask().getTaskSize()==0)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
@@ -104,6 +109,7 @@ public class Test {
                    
                 }
             }
+            
             for(Station station:stationList){
                 if (station.getCurrentTask().getTaskType()==TaskType.T0) {
                     Working=false;
@@ -119,8 +125,8 @@ public class Test {
                 
             }
         } 
-        System.out.println("All jobs are done");  
-        
+        System.out.println("All jobs are done\n");  
+        yaz();
         for(Task task:allTasks){
        
             workflowFile+=task.getFile();
@@ -133,7 +139,7 @@ public class Test {
             FileWriter writer = new FileWriter(file);
             writer.write(content + "\n");
             writer.close();
-            System.out.println("Content written to file successfully.");
+           // System.out.println("Content written to file successfully.");
         } catch (IOException e) {
             System.out.println("An error occurred while writing to the file.");
             e.printStackTrace();
@@ -177,6 +183,9 @@ public class Test {
         
         basla();
         writeToFile(workflowFile, outputFilePath);
+        for (Station station : stationList) {
+            System.out.println(station.getName()+" utilization: "+((tur-station.getIdleCount())/tur)*100.0);
+        }
         
         
         
