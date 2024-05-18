@@ -22,7 +22,7 @@ class Task{
     public void setTaskType(String t) {
         // Tries setting the enum value, if the value doesn't exist in the enum, it will throw an error and terminate the program.
         try{
-            this.taskType = taskType.valueOf(t);
+            this.taskType = TaskType.valueOf(t);
         }
         catch(IllegalArgumentException e){
             Pattern p = Pattern.compile("TaskType\\.([A-z0-9_. ]+)");

@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -54,13 +53,12 @@ public class Test {
             }    
     }
     public static void basla() {
-        boolean uyum=false;
         tur = 1;
         boolean Working=false;
         yaz();
         while (activeTasks.isEmpty()==false||Working==true) {
            
-            uyum=false;
+            
             for (Station station : stationList) {
                 for (Task task : activeTasks) {
                     if (station.getSupportedTaskTypes().contains(task.getTaskType()) && station.getCurrentTask().getTaskType()==TaskType.T0) {
@@ -71,7 +69,6 @@ public class Test {
                         station.setCurrentTask(task);
                         activeTasks.remove(task);
                         station.getCurrentTask().setTaskSize(station.calculateTaskDuration(task));
-                        uyum=true;
                         for (Job job : jobList) {
                             if (job.getTasks().contains(station.getCurrentTask())){
                                 station.getCurrentTask().setFile("\n"+job.getJobID()+" ");;
@@ -81,11 +78,7 @@ public class Test {
                         station.getCurrentTask().setFile(task.getTaskType()+" "+tur+" ");
                         break;
                     }
-                    else {
-                        
-                        uyum=false;
-                        break;
-                    }
+                    
                 }
 
                 
@@ -94,23 +87,32 @@ public class Test {
             //her tur
             for (Station station : stationList) {
                 station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
-                if (station.getCurrentTask().getTaskSize()==0&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
+                if ((station.getCurrentTask().getTaskSize()==0)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
                 
                     station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
-                    System.out.println("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
-                    
-                    station.setCurrentTask(Idle);
-                    
-                    break;
-                }
-                if (station.getCurrentTask().getTaskSize()<0&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
-                
-                    station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()));
                     System.out.println("Minute "+(tur+1)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                     
                     station.setCurrentTask(Idle);
                     
-                    break;
+                   
+                }
+                else if ((station.getCurrentTask().getTaskSize()>-0.5)&&(station.getCurrentTask().getTaskSize()<=0)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
+                
+                    station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
+                    System.out.println("Minute "+(tur)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                    
+                    station.setCurrentTask(Idle);
+                    
+                   
+                }
+                else if ((station.getCurrentTask().getTaskSize()>-1)&&(station.getCurrentTask().getTaskSize()<=-0.5)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
+                
+                    station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
+                    System.out.println("Minute "+(tur+1)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                    
+                    station.setCurrentTask(Idle);
+                    
+                   
                 }
             }
             for(Station station:stationList){
@@ -184,6 +186,7 @@ public class Test {
                 System.out.println("--- " + ta.getTaskName());
         }
         allTasks.addAll(activeTasks);
+        
         basla();
         writeToFile(workflowFile, outputFilePath);
         
