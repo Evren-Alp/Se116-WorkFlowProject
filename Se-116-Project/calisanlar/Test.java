@@ -13,7 +13,7 @@ public class Test {
     public static String workflowFile="";
     public static ArrayList<Task> allTasks = new ArrayList<>();
     public static ArrayList<Task> activeTasks = new ArrayList<>();
-    public static Task Idle = new Task("IDLE", 0,TaskType.T0);
+    public static Task Idle = new Task("IDLE", -20,TaskType.T0);
     public static int tur = 1;
     public static ArrayList<Station> stationList = new ArrayList<>();
     public static ArrayList<Job> jobList;
@@ -56,9 +56,10 @@ public class Test {
     public static void basla() {
         boolean uyum=false;
         tur = 1;
-        boolean bothIdle=false;
+        boolean Working=false;
         yaz();
-        while (activeTasks.isEmpty()==false||bothIdle==false) {
+        while (activeTasks.isEmpty()==false||Working==true) {
+           
             uyum=false;
             for (Station station : stationList) {
                 for (Task task : activeTasks) {
@@ -86,14 +87,13 @@ public class Test {
                         break;
                     }
                 }
-                if (bothIdle==false) {
-                    break;
-                }
+                
+                
             }
             //her tur
             for (Station station : stationList) {
                 station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
-                if (station.getCurrentTask().getTaskSize()==0) {
+                if (station.getCurrentTask().getTaskSize()<=0&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
                 
                     station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
                     System.out.println("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
@@ -105,15 +105,15 @@ public class Test {
             }
             for(Station station:stationList){
                 if (station.getCurrentTask().getTaskType()==TaskType.T0) {
-                    bothIdle=true;
+                    Working=false;
                 }
                 else{
-                    bothIdle=false;
+                    Working=true;
                     break;
                 }
             }
             tur++;
-            if (activeTasks.isEmpty()&&bothIdle==true) {
+            if (activeTasks.isEmpty()&&Working==false) {
                 break;
                 
             }
