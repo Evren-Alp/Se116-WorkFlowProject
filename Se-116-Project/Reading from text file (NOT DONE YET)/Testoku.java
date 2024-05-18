@@ -25,7 +25,11 @@ public class Testoku{
             System.err.println("File not found.\nTerminating...");
             System.exit(1);
         }
-
+        readTaskTypes();
+        readJobTypes();
+        readStations();
+    }
+    private void readTaskTypes(){
         // Checking for Syntax Errors: ----------------------------------------------------------------------------------------
         // Pattern for checking negative task sizes
         boolean found1 = false;
@@ -37,8 +41,7 @@ public class Testoku{
                             "\" at indexes: " + negativeNumMatcher.start() + " - " + negativeNumMatcher.end());
         }
         if(found1){
-            System.out.println("task size should be a positive integer.");
-            System.out.println("Terminating...");
+            System.out.println("task size should be a positive integer.\nTerminating...");
             System.exit(1);
         }
         else if(debugging) System.out.println("[OK] Tasktype sizes");
@@ -108,7 +111,8 @@ public class Testoku{
             amount = 0;
         }
         if(debugging) System.out.println("[OK] No tasktype duplicates.");
-
+    }
+    private void readJobTypes(){
         // SELECTING THE JOBTYPES SECTION -------------------------------------------------------------------------------------
         Pattern jobsPattern = Pattern.compile("([(]JOBTYPES(?:\\s+[(][A-z0-9 ]+\\.\\d+[)]|\\s+[(][A-z0-9\\s]+[)])+[)]+)");
         Matcher match1 = jobsPattern.matcher(txt);
@@ -228,8 +232,8 @@ public class Testoku{
             System.out.println("[OK] All TaskTypes have size declared");
             System.out.println("[OK] All TaskType are valid");
         }
-
-
+    }
+    private void readStations(){
         // STATIONS SECTION ---------------------------------------------------------------------------------------------------
         // Pattern for all of the stations
         Pattern pattern1 = Pattern.compile("([(]STATIONS\\s+([()A-z0-9.\\s]+)[)])");
