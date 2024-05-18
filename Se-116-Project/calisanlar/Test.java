@@ -126,7 +126,7 @@ public class Test {
             }
         } 
         System.out.println("All jobs are done\n");  
-        yaz();
+        
         for(Task task:allTasks){
        
             workflowFile+=task.getFile();
@@ -147,8 +147,7 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        // File file = new File("Se-116-Project\\calisanlar\\Workflow.txt");
-        // System.out.println(file.getAbsolutePath());
+       
         
 
         // Func Req. 1: Getting input from user for file paths
