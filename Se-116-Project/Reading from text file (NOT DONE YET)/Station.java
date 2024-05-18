@@ -21,11 +21,11 @@ public class Station {
 
     }
     public Station(String name, int maxCapacity, boolean multiflag, boolean fifoflag){//remove tasktype
-        this.supportedTaskTypes.add(TaskType.T0);
-        this.supportedTaskTypes.add(TaskType.T1);
-        this.supportedTaskTypes.add(TaskType.T2);
-        this.supportedTaskTypes.add(TaskType.T3);
-        this.supportedTaskTypes.add(TaskType.T4);
+        // this.supportedTaskTypes.add(TaskType.T0);
+        // this.supportedTaskTypes.add(TaskType.T1);
+        // this.supportedTaskTypes.add(TaskType.T2);
+        // this.supportedTaskTypes.add(TaskType.T3);
+        // this.supportedTaskTypes.add(TaskType.T4);
         this.name = name;
         this.maxCapacity = maxCapacity;
         this.capacity = maxCapacity;
@@ -33,11 +33,11 @@ public class Station {
         this.fifoflag = fifoflag;
     }
     public Station(String name, boolean multiflag, boolean fifoflag){
-        this.supportedTaskTypes.add(TaskType.T0);
-        this.supportedTaskTypes.add(TaskType.T1);
-        this.supportedTaskTypes.add(TaskType.T2);
-        this.supportedTaskTypes.add(TaskType.T3);
-        this.supportedTaskTypes.add(TaskType.T4);
+        // this.supportedTaskTypes.add(TaskType.T0);
+        // this.supportedTaskTypes.add(TaskType.T1);
+        // this.supportedTaskTypes.add(TaskType.T2);
+        // this.supportedTaskTypes.add(TaskType.T3);
+        // this.supportedTaskTypes.add(TaskType.T4);
         this.name = name;
         this.multiflag = multiflag;
         this.fifoflag = fifoflag;
@@ -126,6 +126,9 @@ public class Station {
         return supportedTaskTypes;
     }
     public void setSupportedTaskTypes(ArrayList<TaskType> supportedTaskTypes) {
+        for(TaskType t: supportedTaskTypes){
+            System.out.println(this.name + " " + t);
+        }
         this.supportedTaskTypes = supportedTaskTypes;
     }
     public void setTasks(ArrayList<Task> tasks) {

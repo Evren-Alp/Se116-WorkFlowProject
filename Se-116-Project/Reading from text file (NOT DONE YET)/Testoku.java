@@ -307,6 +307,7 @@ public class Testoku{
                     tasks2.add(matcher2.group(1));
                 }
                 ArrayList<String> plusMinusList = new ArrayList<>();
+                ArrayList<TaskType> supportedTasks = new ArrayList<>();
                 //Separating TaskID and sizes, checking for error if size is not declared anywhere.
                 for(String ss: tasks2){
                     Task stationTask = new Task();
@@ -314,12 +315,14 @@ public class Testoku{
                     if(splitten.length == 2){
                         stationTask.setTaskName(splitten[0]);
                         stationTask.setTaskType(splitten[0]);
+                        supportedTasks.add(TaskType.valueOf(splitten[0]));
                         stationTask.setTaskSize(Float.valueOf(splitten[1]));
                         stationTasksList.add(stationTask);
                     }
                     else if(splitten.length == 3){
                         stationTask.setTaskName(splitten[0]);
                         stationTask.setTaskType(splitten[0]);
+                        supportedTasks.add(TaskType.valueOf(splitten[0]));
                         stationTask.setTaskSize(Float.valueOf(splitten[1]));
                         plusMinusList.add(splitten[0] + " " + splitten[2]);
                         stationTasksList.add(stationTask);
@@ -327,6 +330,7 @@ public class Testoku{
                     else{
                         stationTask.setTaskName(splitten[0]);
                         stationTask.setTaskType(splitten[0]);
+                        supportedTasks.add(TaskType.valueOf(splitten[0]));
                         boolean isValid = false;
                         for(int i = 0; i<tasksList.length; i++){
                             if(tasksList[i].getTaskName().equals(stationTask.getTaskName())){
@@ -350,9 +354,11 @@ public class Testoku{
                 if(maxCapDefined){
                     station = new Station(name, maxCap, multi, fifo);
                     station.setTasksList(stationTasksList);
+                    station.setSupportedTaskTypes(supportedTasks);
                 } else if(!maxCapDefined){
                     station = new Station(name, multi, fifo);
                     station.setTasksList(stationTasksList);
+                    station.setSupportedTaskTypes(supportedTasks);
                 }
                 station.setPlusminusList(plusMinusList);
                 stationsList.add(station);
