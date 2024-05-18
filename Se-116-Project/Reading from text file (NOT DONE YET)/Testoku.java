@@ -88,10 +88,12 @@ public class Testoku{
             if(keyVal.length == 2){
                 // System.out.println(keyVal[1]);
                 tasksList[i] = new Task(keyVal[1]);
+                tasksList[i].setTaskType(keyVal[1]);
             }
             else{
                 // System.out.println(keyVal[1] + " " + keyVal[2]);
                 tasksList[i] = new Task(keyVal[1], Float.valueOf(keyVal[2]));
+                tasksList[i].setTaskType(keyVal[1]);
             }
         }
 
