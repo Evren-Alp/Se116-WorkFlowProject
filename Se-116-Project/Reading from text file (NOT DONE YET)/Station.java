@@ -126,9 +126,6 @@ public class Station {
         return supportedTaskTypes;
     }
     public void setSupportedTaskTypes(ArrayList<TaskType> supportedTaskTypes) {
-        for(TaskType t: supportedTaskTypes){
-            System.out.println(this.name + " " + t);
-        }
         this.supportedTaskTypes = supportedTaskTypes;
     }
     public void setTasks(ArrayList<Task> tasks) {
