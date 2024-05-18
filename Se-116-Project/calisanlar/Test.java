@@ -31,23 +31,10 @@ public class Test {
 
 
     
-    public static void displayActiveTasks(){
-        if (jobList.isEmpty()){
-            System.out.println("active task is empty");
-        }
-        if (jobList.isEmpty()==false) {
-            for (Job job : jobList) {
-                for (int i = 0; i < jobList.size(); i++) {
-                    System.out.println(job.getTasks().get(i).getTaskType());
-                    
-                }
-            }
-        }
-       
-    }
+    
     public static void yaz(){
         
-            System.out.println("jobs: ");
+            System.out.println("State of jobs at minute "+tur+": ");
             for (Job job : jobList) {
                 System.out.println(job.getJobID()+"/Remaining: "+job.getJobDuration());
             }    
@@ -57,7 +44,9 @@ public class Test {
         boolean Working=false;
         yaz();
         while (activeTasks.isEmpty()==false||Working==true) {
-           
+           if (tur%5==0) {
+            yaz(); 
+            }
             
             for (Station station : stationList) {
                 for (Task task : activeTasks) {
@@ -131,6 +120,7 @@ public class Test {
             }
         } 
         System.out.println("All jobs are done");  
+        
         for(Task task:allTasks){
        
             workflowFile+=task.getFile();
@@ -181,9 +171,7 @@ public class Test {
         for (Job job : jobList) {
             activeTasks.addAll(job.getTasks());
             // Writing jobs and their tasks (ONLY FOR DEBUGGING)
-            System.out.println("JobID: " + job.getJobID());
-            for(Task ta : job.getTasks())
-                System.out.println("--- " + ta.getTaskName());
+          
         }
         allTasks.addAll(activeTasks);
         
@@ -191,47 +179,7 @@ public class Test {
         writeToFile(workflowFile, outputFilePath);
         
         
-        // ArrayList<Task> taskler1=new ArrayList<>();
-        // ArrayList<Task> taskler2=new ArrayList<>(); 
-        // Task task1 = new Task("task1", 15, TaskType.T1);
-        // Task task2 = new Task("task2", 30, TaskType.T2);
-        // Task task3 = new Task("task3", 45, TaskType.T3);
-        // Task task4 = new Task("task4", 60, TaskType.T4);
-        // taskler1.add(task1);
-        // taskler1.add(task2);
-        // taskler2.add(task3);
-        // taskler2.add(task4);
-
-        /*  jobList=t.getJobList();*/
-        // jobList = new ArrayList<>();
-    
-        // Job job1 = new Job("Job1", new ArrayList<Task>(taskler1));
-        // Job job2 = new Job("Job2",new ArrayList<Task>(taskler2));
-        // jobList.add(job1);
-        // jobList.add(job2);
-
-        // ArrayList<TaskType> stationAblility1 = new ArrayList<>();
-        // stationAblility1.add(TaskType.T1);
-        // stationAblility1.add(TaskType.T2);
-       
-        // ArrayList<TaskType> stationAblility2 = new ArrayList<>();
-        // stationAblility2.add(TaskType.T3);
-        // stationAblility2.add(TaskType.T4);
-
         
-        // Station station1 = new Station("Station1",  3,   true, false);
-        // Station station2 = new Station("Station2",  2,   true, false);
-        // stationList.add(station1);
-        // stationList.add(station2);
-
-       
-        // for (Job job : jobList) {
-        //     activeTasks.addAll(job.getTasks());
-        // }
-        // allTasks.addAll(activeTasks);
-        // basla();
-        // System.out.println(workflowFile);
-        // writeToFile(workflowFile, outputFilePath);
        
     }  
 }
