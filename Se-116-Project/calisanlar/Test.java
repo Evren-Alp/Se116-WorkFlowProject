@@ -87,16 +87,26 @@ public class Test {
                         break;
                     }
                 }
+
                 
                 
             }
             //her tur
             for (Station station : stationList) {
                 station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
-                if (station.getCurrentTask().getTaskSize()<=0&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
+                if (station.getCurrentTask().getTaskSize()==0&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
                 
                     station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
                     System.out.println("Minute "+tur+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
+                    
+                    station.setCurrentTask(Idle);
+                    
+                    break;
+                }
+                if (station.getCurrentTask().getTaskSize()<0&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
+                
+                    station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()));
+                    System.out.println("Minute "+(tur+1)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                     
                     station.setCurrentTask(Idle);
                     
