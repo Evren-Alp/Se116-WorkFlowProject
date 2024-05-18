@@ -1,16 +1,9 @@
 import java.util.ArrayList;
 
 class Job{
-    private String jobName;
     private float jobDuration=20;
     private String jobID = "";
     private ArrayList<Task> tasks;
-    public String getJobName() {
-        return jobName;
-    }
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
-    }
     public float getJobDuration() {
         this.jobDuration = 0;
         for (Task task : tasks) {
