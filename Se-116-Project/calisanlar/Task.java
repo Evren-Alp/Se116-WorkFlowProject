@@ -83,6 +83,33 @@ class Task{
         else if(t.equals("T21")){
             this.taskType = taskType.T21;
         }
+        else if(t.equals("T22")){
+            this.taskType = taskType.T22;
+        }
+        else if(t.equals("T23")){
+            this.taskType = taskType.T23;
+        }
+        else if(t.equals("T24")){
+            this.taskType = taskType.T24;
+        }
+        else if(t.equals("T25")){
+            this.taskType = taskType.T25;
+        }
+        else if(t.equals("T26")){
+            this.taskType = taskType.T26;
+        }
+        else if(t.equals("T27")){
+            this.taskType = taskType.T27;
+        }
+        else if(t.equals("T28")){
+            this.taskType = taskType.T28;
+        }
+        else if(t.equals("T29")){
+            this.taskType = taskType.T29;
+        }
+        else if(t.equals("T30")){
+            this.taskType = taskType.T30;
+        }
         else{
             System.err.println("Wrong tasktype.\nTerminating...");
             System.out.println(t);
