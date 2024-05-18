@@ -11,7 +11,7 @@ public class Station {
     private boolean multiflag;
     private boolean fifoflag;
     private float speed=1;
-    private float plusminus=0.2f;
+    private float plusminus=0.0f;
     private Task currentTask=Test.Idle;
     Random r= new Random();
     private ArrayList<TaskType> supportedTaskTypes=new ArrayList<>();
