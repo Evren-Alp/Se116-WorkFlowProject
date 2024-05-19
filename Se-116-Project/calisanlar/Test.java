@@ -114,8 +114,8 @@ public class Test {
             writer.close();
            // System.out.println("Content written to file successfully.");
         } catch (IOException e) {
-            System.out.println("An error occurred while writing to the file.");
-            e.printStackTrace();
+            System.out.println("An error occurred while writing to the file.\nTerminating...");
+            System.exit(1);
         }
     }
 
@@ -134,10 +134,24 @@ public class Test {
             outputFilePath = sc.nextLine();
         }
         else{
-            System.out.print("Enter input file path: ");
-            inputFilePath = sc.nextLine();
-            System.out.print("Enter output file path: ");
-            outputFilePath = sc.nextLine();
+            boolean inputPathGiven = false;
+            while(!inputPathGiven){
+                System.out.print("Enter input file path: ");
+                inputFilePath = sc.nextLine();
+                if(inputFilePath.equals("")){
+                    System.out.println("Not a valid input. Try again.");
+                }
+                else inputPathGiven = true;
+            }
+            boolean outputPathGiven = false;
+            while(!outputPathGiven){
+                System.out.print("Enter output file path: ");
+                outputFilePath = sc.nextLine();
+                if(outputFilePath.equals("")){
+                    System.out.println("Not a valid input. Try again.");
+                }
+                else outputPathGiven = true;
+            }
         }
         sc.close();
 

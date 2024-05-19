@@ -22,7 +22,7 @@ public class inputReader{
             }
             sc.close();
         } catch (FileNotFoundException e) {
-            System.err.println("File not found.\nTerminating...");
+            System.err.println("Input file not found.\nTerminating...");
             System.exit(1);
         }
         readTaskTypes();
