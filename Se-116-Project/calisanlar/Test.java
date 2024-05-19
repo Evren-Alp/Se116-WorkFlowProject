@@ -14,15 +14,7 @@ public class Test {
     public static ArrayList<Station> stationList = new ArrayList<>();
     public static ArrayList<Job> jobList;
 
-    public static void describeJob(Job job) {
-        System.out.println("Job ID: " + job.getJobID());
-        System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
-        System.out.println("Tasks:");
-        for (Task task : job.getTasks()) {
-            System.out.println("\nTask: " + task.getTaskType());
-            System.out.println("Task duration: " + task.getTaskSize()+" minutes");
-        }
-    }
+    
 
     public static void yaz(){
         System.out.println("State of jobs at minute "+tur+": ");
