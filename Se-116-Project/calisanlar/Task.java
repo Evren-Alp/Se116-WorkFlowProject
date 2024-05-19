@@ -7,12 +7,25 @@ class Task{
     private TaskType taskType;
     private int startingTime; 
     private String file="";   
-        
     
-    public Task(Task task){
-        this.name = task.name;
-        this.size = task.size;
+    public Task(String name, float size, TaskType taskType){
+        this.name = name;
+        this.size = size;
+        this.taskType = taskType;
     }
+    public Task(String name, float size){
+        this.name = name;
+        this.size = size;
+    }
+    public Task(Task task){
+        this.name = task.getTaskName();
+        this.size = task.getTaskSize();
+        this.taskType = task.getTaskType();
+    }
+    public Task(String name){
+        this.name = name;
+    }
+    public Task(){}
     public TaskType getTaskType() {
         return taskType;
     }
@@ -35,38 +48,28 @@ class Task{
             System.exit(1);
         }
     }
-    public Task(String name, float size, TaskType taskType){
-        this.name = name;
-        this.size = size;
-        this.taskType = taskType;
-    }public Task(String name, float size){
-        this.name = name;
-        this.size = size;
-    }
-    public Task(String name){
-        this.name = name;
-    }
-    public Task(){
 
-    }
     public String getTaskName(){
         return this.name;
     }
     public void setTaskName(String name){
         this.name = name;
     }
+
     public float getTaskSize(){
         return this.size;
     }
     public void setTaskSize(float size){
         this.size = size;
     }
+
     public int getStartingTime() {
         return startingTime;
     }
     public void setStartingTime(int startingTime) {
         this.startingTime = startingTime;
     }
+
     public String getFile() {
         return file;
     }

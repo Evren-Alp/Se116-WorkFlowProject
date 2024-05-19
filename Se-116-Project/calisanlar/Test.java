@@ -1,11 +1,8 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Scanner;
-
-
 
 
 public class Test {
@@ -16,6 +13,7 @@ public class Test {
     public static int tur = 1;
     public static ArrayList<Station> stationList = new ArrayList<>();
     public static ArrayList<Job> jobList;
+
     public static void describeJob(Job job) {
         System.out.println("Job ID: " + job.getJobID());
         System.out.println("Job Duration: " + job.getJobDuration() + " minutes");
@@ -26,33 +24,23 @@ public class Test {
         }
     }
 
-    
-
-
-
-    
-    
     public static void yaz(){
-        
-            System.out.println("State of jobs at minute "+tur+": ");
-            for (Job job : jobList) {
-                System.out.println(job.getJobID()+"/Remaining: "+job.getJobDuration());
-            }    
+        System.out.println("State of jobs at minute "+tur+": ");
+        for (Job job : jobList) {
+            System.out.println(job.getJobID()+"/Remaining: "+job.getJobDuration());
+        }    
     }
     public static void basla() {
+        // The process of the progam is done here
         tur = 1;
         boolean Working=false;
         yaz();
         while (activeTasks.isEmpty()==false||Working==true) {
-           
-            
-            
             for (Station station : stationList) {
                 for (Task task : activeTasks) {
                     if (station.getSupportedTaskTypes().contains(task.getTaskType()) && station.getCurrentTask().getTaskType()==TaskType.T0) {
                         station.work(task);
                         task.setStartingTime(tur);
-                        
                         
                         station.setCurrentTask(task);
                         activeTasks.remove(task);
@@ -66,50 +54,38 @@ public class Test {
                         station.getCurrentTask().setFile(task.getTaskType()+" "+tur+" ");
                         break;
                     }
-                    
                 }
-
-                
-                
             }
-            //her tur
+            // Her tur
             for (Station station : stationList) {
                 if (station.getCurrentTask().getTaskType()==TaskType.T0) {
                     station.setIdleCount(station.getIdleCount()+1);
-                    
                 }
             }
             for (Station station : stationList) {
                 station.getCurrentTask().setTaskSize(station.getCurrentTask().getTaskSize()-1);
                 if ((station.getCurrentTask().getTaskSize()==0)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
-                
                     station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
                     System.out.println("Minute "+(tur+1)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                     
                     station.setCurrentTask(Idle);
                     
-                   
                 }
                 else if ((station.getCurrentTask().getTaskSize()>-0.5)&&(station.getCurrentTask().getTaskSize()<=0)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
-                
                     station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
                     System.out.println("Minute "+(tur)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                     
                     station.setCurrentTask(Idle);
-                    
-                   
+
                 }
                 else if ((station.getCurrentTask().getTaskSize()>-1)&&(station.getCurrentTask().getTaskSize()<=-0.5)&&station.getCurrentTask().getTaskType()!=TaskType.T0) {
-                
                     station.getCurrentTask().setFile(""+(tur-station.getCurrentTask().getStartingTime()+1));
                     System.out.println("Minute "+(tur+1)+": "+station.getName()+" finished "+station.getCurrentTask().getTaskType());
                     
                     station.setCurrentTask(Idle);
-                    
-                   
+
                 }
             }
-            
             for(Station station:stationList){
                 if (station.getCurrentTask().getTaskType()==TaskType.T0) {
                     Working=false;
@@ -122,17 +98,14 @@ public class Test {
             tur++;
             if (activeTasks.isEmpty()&&Working==false) {
                 break;
-                
             }
         } 
         System.out.println("All jobs are done\n");  
-        
         for(Task task:allTasks){
-       
             workflowFile+=task.getFile();
         } 
     }
-    //write method??
+    // Write to file (output) method
     public static void writeToFile(String content, String outputPath) {
         try {
             File file = new File(outputPath);
@@ -147,9 +120,6 @@ public class Test {
     }
 
     public static void main(String[] args) {
-       
-        
-
         // Func Req. 1: Getting input from user for file paths
         String inputFilePath = "";
         String outputFilePath = "";
@@ -157,6 +127,11 @@ public class Test {
         if(args.length == 2){
             inputFilePath = args[0];
             outputFilePath = args[1];
+        }
+        else if(args.length == 1){
+            inputFilePath = args[0];
+            System.out.print("Enter output file path: ");
+            outputFilePath = sc.nextLine();
         }
         else{
             System.out.print("Enter input file path: ");
@@ -167,16 +142,14 @@ public class Test {
         sc.close();
 
         // Func Req. 2: Readin the input file
-        Testoku t = new Testoku(inputFilePath);
+        inputReader input = new inputReader(inputFilePath);
 
-        stationList.addAll(t.getStations());
+        stationList.addAll(input.getStations());
 
         // Listing all of the tasks from all of the jobs
-        jobList = t.getJobList();
+        jobList = input.getJobList();
         for (Job job : jobList) {
             activeTasks.addAll(job.getTasks());
-            // Writing jobs and their tasks (ONLY FOR DEBUGGING)
-          
         }
         allTasks.addAll(activeTasks);
         
@@ -185,9 +158,5 @@ public class Test {
         for (Station station : stationList) {
             System.out.println(station.getName()+" utilization: "+((tur-station.getIdleCount())/tur)*100.0);
         }
-        
-        
-        
-       
-    }  
+    }
 }
